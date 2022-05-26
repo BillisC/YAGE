@@ -31,7 +31,7 @@
 */
 
 class Memory{
-public:
+private:
     uint8_t memory[0xFFFF];
 
 public:
@@ -39,6 +39,7 @@ public:
 
     void load_catridge();    
     void write_2_mem(uint16_t loc, uint8_t byte);
+    uint8_t read_from_mem(uint16_t loc);
 };
 
 #endif

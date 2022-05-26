@@ -11,6 +11,7 @@ struct flag_register{
     uint8_t Z   : 1;
 };
 
+
 struct gameboy_system{
     uint8_t A, B, C, D, E, F, H, L;
     flag_register flags;
@@ -23,7 +24,7 @@ struct gameboy_system{
     //Timers timerH;
     //Interrupts intrH;
     //S_Modes modeH;
-};
+}gb_sys;
 
 
 #endif
