@@ -1,1 +1,4 @@
 .vscode/
+build/
+debug/
+gameboyemu.exe
