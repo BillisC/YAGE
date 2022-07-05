@@ -2,9 +2,9 @@
 #define MEMORY_H
 
 #include <stdint.h>
+#include <string.h>
 
-/*
-     Interrupt Enable Register
+/*   Interrupt Enable Register
     --------------------------- FFFF
      Internal RAM
     --------------------------- FF80
@@ -27,19 +27,27 @@
      16kB switchable ROM bank         |
     --------------------------- 4000  |= 32kB Cartrigbe
      16kB ROM bank #0                 |
-    --------------------------- 0000 --
-*/
+    --------------------------- 0000 -- */
 
 class Memory{
 private:
     uint8_t memory[0xFFFF];
 
 public:
-    Memory();
+    Memory(){};
 
-    void load_catridge();    
-    void write_2_mem(uint16_t loc, uint8_t byte);
-    uint8_t read_from_mem(uint16_t loc);
+    void Init();
+    void Clear();
+
+    // Write operations
+    void Write8Mem( const uint16_t loc, const uint8_t byte );
+    void WriteMem( const uint16_t loc, uint8_t *buffer, const uint8_t size );
+
+    // Read operations
+    void CopyMem( uint8_t *buffer );
+    uint8_t Read8Mem( const uint16_t loc );
+    uint16_t Read16Mem( const uint16_t loc );
+    uint8_t *GetHostAddressMem( const uint16_t loc ); // Allows the use of pointers and adds control over the address space of memory
 };
 
 #endif
