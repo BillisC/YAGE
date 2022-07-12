@@ -29,25 +29,25 @@
      16kB ROM bank #0                 |
     --------------------------- 0000 -- */
 
-class Memory{
+class Memory {
 private:
     uint8_t memory[0xFFFF];
 
 public:
-    Memory(){};
+    Memory() {};
 
     void Init();
     void Clear();
 
     // Write operations
-    void Write8Mem( const uint16_t loc, const uint8_t byte );
-    void WriteMem( const uint16_t loc, uint8_t *buffer, const uint8_t size );
+    void Write(const uint16_t loc, uint8_t* buffer, const uint8_t size);
+    void Write8(const uint16_t loc, const uint8_t byte);
 
     // Read operations
-    void CopyMem( uint8_t *buffer );
-    uint8_t Read8Mem( const uint16_t loc );
-    uint16_t Read16Mem( const uint16_t loc );
-    uint8_t *GetHostAddressMem( const uint16_t loc ); // Allows the use of pointers and adds control over the address space of memory
+    void CopyMem(uint8_t* buffer);
+    uint8_t Read8(const uint16_t loc);
+    uint16_t Read16(const uint16_t loc);
+    uint8_t* GetHostAddress(const uint16_t loc); // Allows the use of pointers and adds control over the address space of memory
 };
 
 #endif
