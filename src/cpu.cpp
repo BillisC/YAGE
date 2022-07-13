@@ -38,7 +38,7 @@ int CPU::LoadCatridge(const std::string file_name) {
     // Load the file in the memory
     uint8_t buffer[file_size];
     rom.read(reinterpret_cast<char*>(buffer), file_size);
-    memory.Write(0x100, buffer, file_size);
+    memory.Write(0x0, buffer, file_size);
 
     rom.close();
     return 0;

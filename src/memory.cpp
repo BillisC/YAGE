@@ -12,7 +12,7 @@ void Memory::Clear() {
 
 // Write Operations
 void Memory::Write(const uint16_t loc, uint8_t* buffer, const uint8_t size) {
-    memcpy(memory + 0x100, buffer, size);
+    memcpy(memory + loc, buffer, size);
 }
 
 void Memory::Write8(const uint16_t loc, const uint8_t byte) {
