@@ -4,34 +4,35 @@
 #include <stdint.h>
 #include <string.h>
 
-/*   Interrupt Enable Register
-    --------------------------- FFFF
-     Internal RAM
-    --------------------------- FF80
+/*  --------------------------- 0xFFFF
+     Interrupt Enable Register  
+    --------------------------- 0xFFFE
+     Internal CPU RAM
+    --------------------------- 0xFF7F
+     I/O Registers
+    --------------------------- 0xFEFF
      Empty but unusable for I/O
-    --------------------------- FF4C
-     I/O ports
-    --------------------------- FF00
-     Empty but unusable for I/O
-    --------------------------- FEA0
+    --------------------------- 0xFE9F
      Sprite Attrib Memory (OAM)
-    --------------------------- FE00
-     Echo of 8kB Internal RAM
-    --------------------------- E000
-     8kB Internal RAM
-    --------------------------- C000
-     8kB switchable RAM bank
-    --------------------------- A000
+    --------------------------- 0xFDFF
+     Echo of Work RAM
+    --------------------------- 0xDFFF
+     4kB Work RAM, switchable (1-7)
+    --------------------------- 0xCFFF
+     4kB Work RAM
+    --------------------------- 0xBFFF
+     8kB External RAM (catridge)
+    --------------------------- 0x9FFF
      8kB Video RAM
-    --------------------------- 8000 --
-     16kB switchable ROM bank         |
-    --------------------------- 4000  |= 32kB Cartrigbe
-     16kB ROM bank #0                 |
-    --------------------------- 0000 -- */
+    --------------------------- 0x7FFF
+     16kB switchable ROM bank         
+    --------------------------- 0x3FFF 
+     16kB ROM bank #0                   
+    --------------------------- 0x0000 -- */
 
 class Memory {
 private:
-    uint8_t memory[0xFFFF + 1];
+    uint8_t **memory[0xFFFF + 1];
 
 public:
     Memory() {};
