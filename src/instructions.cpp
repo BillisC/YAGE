@@ -279,6 +279,10 @@ void CPU::CALL_C_U16() { if (flags.C) CALL(memory.Read16(registers.PC)); }
 void CPU::CALL_NZ_U16() { if (!flags.Z) CALL(memory.Read16(registers.PC)); }
 void CPU::CALL_NC_U16() { if (!flags.C) CALL(memory.Read16(registers.PC)); }
 
+void CPU::RET() {
+    registers.PC = (*memory.GetHostAddress(registers.SP + 1) << 8) | *memory.GetHostAddress(registers.SP);
+    registers.SP += 2;
+}
 void CPU::RETI() { flags.IME = true; RET(); }
 void CPU::RET_Z() { if (flags.Z) RET(); }
 void CPU::RET_C() { if (flags.C) RET(); }
@@ -345,6 +349,40 @@ void CPU::SRL_L() { SRL(&registers.L); }
 void CPU::SRL_A() { SRL(&registers.A); }
 void CPU::SRL_ADDR_HL() { SRL(memory.GetHostAddress(registers.Pair(registers.H, registers.L))); }
 
+void CPU::RLCA() {
+    flags.C = ((registers.A & 0x80) >> 7);
+    registers.A <<= 1;
+    registers.A |= flags.C;
+    flags.N ^= flags.N;
+    flags.H ^= flags.H;
+    flags.Z = (registers.A == 0);
+}
+void CPU::RRCA() {
+    flags.C = (registers.A & 0x01);
+    registers.A >>= 1;
+    registers.A |= (flags.C << 7);
+    flags.N ^= flags.N;
+    flags.H ^= flags.H;
+    flags.Z = (registers.A == 0);
+}
+void CPU::RLA() {
+    bool tmp = flags.C;
+    flags.C = ((registers.A & 0x80) >> 7);
+    registers.A <<= 1;
+    registers.A |= tmp;
+    flags.N ^= flags.N;
+    flags.H ^= flags.H;
+    flags.Z ^= flags.Z;
+}
+void CPU::RRA() {
+    bool tmp = flags.C;
+    flags.C = (registers.A & 0x10);
+    registers.A >>= 1;
+    registers.A |= (tmp << 7);
+    flags.N ^= flags.N;
+    flags.H ^= flags.H;
+    flags.Z ^= flags.Z;
+}
 
 // -- BIT OPERATIONS --
 void CPU::SWAP_B() { SWAP(&registers.B); }

@@ -31,7 +31,7 @@
 
 class Memory {
 private:
-    uint8_t memory[0xFFFF];
+    uint8_t memory[0xFFFF + 1];
 
 public:
     Memory() {};
@@ -40,14 +40,17 @@ public:
     void Clear();
 
     // Write operations
-    void Write(const uint16_t loc, uint8_t* buffer, const uint8_t size);
+    void Write(const uint16_t loc, uint8_t* buffer, const size_t size);
     void Write8(const uint16_t loc, const uint8_t byte);
 
     // Read operations
-    void CopyMem(uint8_t* buffer);
+    void Read(const uint16_t loc, uint8_t* buffer, const size_t size);
     uint8_t Read8(const uint16_t loc);
     uint16_t Read16(const uint16_t loc);
     uint8_t* GetHostAddress(const uint16_t loc); // Allows the use of pointers and adds control over the address space of memory
+
+    // Checks
+    bool VerifyLogo();
 };
 
 #endif

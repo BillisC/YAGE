@@ -1,7 +1,7 @@
 all: exec
 
 TARGET := gameboyemu
-CFLAGS := -O2
+CFLAGS := -O2 -Wall
 OBJECTFILES :=  build/main.o build/cpu.o build/instructions_inlines.o build/instructions.o build/table.o build/memory.o
 
 # Checking

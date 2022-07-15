@@ -22,6 +22,7 @@ void CPU::Init() {
 }
 
 int CPU::LoadCatridge(const std::string file_name) {
+    /* Open the ROM */
     std::fstream rom;
     rom.open(file_name, std::ios::in | std::ios::binary);
     if (!rom.is_open()) {
@@ -29,17 +30,25 @@ int CPU::LoadCatridge(const std::string file_name) {
         return -1;
     }
 
-    // Get the file's size
+    /* Get the ROM's size */
     rom.seekg(0, std::ios::end);
     size_t file_size = rom.tellg();
     rom.seekg(0, std::ios::beg);
     printf("\nROM Size: %d\n", file_size);
 
-    // Load the file in the memory
+    /* Buffer catridge data */
     uint8_t buffer[file_size];
     rom.read(reinterpret_cast<char*>(buffer), file_size);
+    
+    /* Copy catridge header in struct as is */
+    memcpy(&catridge, buffer + 0x134, 0x1B);
+    printf("Title: %s\n", catridge.title);
+    printf("Checksum: %02x\n", catridge.checksum_global[0]);
+
+    /* Copy catridge in memory */
     memory.Write(0x0, buffer, file_size);
 
+    /* Close the ROM */
     rom.close();
     return 0;
 }
@@ -48,14 +57,14 @@ void CPU::MemoryDump() {
     std::fstream dump;
     dump.open("debug/memory_dump.bin", std::ios::out | std::ios::binary);
     if (dump) {
-        uint8_t buffer[0xFFFF];
-        memory.CopyMem(buffer);
+        uint8_t buffer[0xFFFF + 1];
+        memory.Read(0x0, buffer, 0xFFFF + 1);
 
-        dump.write(reinterpret_cast<char*>(buffer), 0xFFFF);
+        dump.write(reinterpret_cast<char*>(buffer), 0xFFFF + 1);
         dump.close();
     }
     else {
-        printf("I/O ERROR: Memory dump file issue");
+        printf("I/O ERROR: Memory dump file issue\n");
     }
 }
 

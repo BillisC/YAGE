@@ -8,7 +8,7 @@ int main() {
     // Setup Environment
     CPU* gb_system = new CPU();
 
-    if (gb_system->LoadCatridge("rom.gb") != 0) {
+    if (gb_system->LoadCatridge("roms/cpu_instrs.gb") != 0) {
         printf("Initialization Failure!\n");
 
         return -1;
