@@ -19,17 +19,29 @@ struct Catridge {
 };
 
 class NO_MBC {
-    uint8_t *rom_bank_0{nullptr};    // Must exist
-    uint8_t **switchable_rom_bank{nullptr};
+protected:
+    uint8_t* rom_bank_0{ nullptr };    // Must exist
+    uint8_t** switchable_rom_bank{ nullptr };
 
-    uint8_t *ram_bank_0{nullptr};    // Should exist
-    uint8_t **switchable_ram_banks{nullptr};
+    uint8_t** switchable_ram_bank{ nullptr };
 
-    NO_MBC(uint8_t ram_size){
+public:
+    NO_MBC() {
         rom_bank_0 = new uint8_t[0x7FFF + 1];
-        
-        if(ram_size == 0x00)
-        ram_bank_0 = new uint8_t[]
+    }
+};
+
+class MBC1 : public NO_MBC {
+public:
+    MBC1(const uint8_t ram_size, const uint8_t rom_size) {
+        rom_bank_0 = new uint8_t[0x3FFF + 1];
+    }
+};
+
+class MBC2 : public NO_MBC {
+public:
+    MBC2(const uint8_t rom_size) {
+        rom_bank_0 = new uint8_t[0x3FFF + 1];
     }
 };
 
