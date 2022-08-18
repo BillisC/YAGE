@@ -8,7 +8,7 @@
 
 // Components
 #include "memory.h"
-#include "catridge.h"
+#include "cartridge.h"
 
 #define SPEED_SW *(memory.GetHostAddress(0xFF4D))
 
@@ -32,7 +32,7 @@ class CPU {
     Registers registers;
     Flags flags;
     Memory memory;
-    Catridge catridge;
+    Cartridge cartridge;
     //Sound sound;
     //Video video;
     //Timers timer;

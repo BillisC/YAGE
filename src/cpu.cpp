@@ -41,9 +41,9 @@ int CPU::LoadCatridge(const std::string file_name) {
     rom.read(reinterpret_cast<char*>(buffer), file_size);
     
     /* Copy catridge header in struct as is */
-    memcpy(&catridge, buffer + 0x134, 0x1B);
-    printf("Title: %s\n", catridge.title);
-    printf("Checksum: %02x\n", catridge.checksum_global[0]);
+    memcpy(&cartridge, buffer + 0x134, 0x1B);
+    printf("Title: %s\n", cartridge.title);
+    printf("Checksum: %02x\n", cartridge.checksum_global[0]);
 
     /* Copy catridge in memory */
     memory.Write(0x0, buffer, file_size);
