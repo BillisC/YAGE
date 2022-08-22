@@ -18,8 +18,8 @@ void Memory::Write(const uint16_t loc, uint8_t* buffer, const size_t size) {
 
 void Memory::Write8(const uint16_t loc, const uint8_t byte) {
     if (!(loc >= 0xE000 && loc <= 0xFE00)) {
-        memory[loc] = byte;
-        if (loc >= 0xC000 && loc <= 0xDE00) memory[loc + 0x2000] = byte;
+        *memory[loc] = byte;
+        if (loc >= 0xC000 && loc <= 0xDE00) *memory[loc + 0x2000] = byte;
     }
     else {
         /* memory[loc - 0x2000] = byte; */  // Nintendo prohibited
@@ -34,15 +34,15 @@ void Memory::Read(const uint16_t loc, uint8_t* buffer, const size_t size) {
 }
 
 uint8_t Memory::Read8(const uint16_t loc) {
-    return memory[loc + 1];
+    return *memory[loc + 1];
 }
 
 uint16_t Memory::Read16(const uint16_t loc) {
-    return (memory[loc + 2] << 8) | memory[loc + 1];
+    return (*memory[loc + 2] << 8) | *memory[loc + 1];
 }
 
 uint8_t* Memory::GetHostAddress(const uint16_t loc) {
-    return &memory[loc];
+    return memory[loc];
 }
 
 

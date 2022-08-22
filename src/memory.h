@@ -21,8 +21,7 @@
 
 class Memory {
 private:
-    uint8_t **memory[0xFFFF + 1];
-    //uint8_t *wram[0x0FFF];
+    uint8_t* memory[0xFFFF + 1];
 
 public:
     Memory() {};
