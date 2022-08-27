@@ -17,7 +17,7 @@ struct Cartridge {
     uint8_t checksum_header;
     uint8_t checksum_global[2];
 
-    MBC mbc;
+    //MBC mbc;
 };
 
 /* Memory Bank Controllers */

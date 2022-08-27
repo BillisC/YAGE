@@ -4,208 +4,195 @@
 void CPU::NOP() {}
 
 // -- LOAD --
-void CPU::LD_B_U8() { LD(&registers.BC.solo.B, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::LD_C_U8() { LD(&registers.BC.solo.C, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::LD_D_U8() { LD(&registers.DE.solo.D, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::LD_E_U8() { LD(&registers.DE.solo.E, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::LD_H_U8() { LD(&registers.HL.solo.H, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::LD_L_U8() { LD(&registers.HL.solo.L, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::LD_A_U8() { LD(&registers.AF.solo.A, memory.GetHostAddress(registers.PC + 1)); }
+void CPU::LD_B_U8() { registers.PC++; LD(&registers.BC.solo.B, memory.Read8(registers.PC++)); }
+void CPU::LD_C_U8() { registers.PC++; LD(&registers.BC.solo.C, memory.Read8(registers.PC++)); }
+void CPU::LD_D_U8() { registers.PC++; LD(&registers.DE.solo.D, memory.Read8(registers.PC++)); }
+void CPU::LD_E_U8() { registers.PC++; LD(&registers.DE.solo.E, memory.Read8(registers.PC++)); }
+void CPU::LD_H_U8() { registers.PC++; LD(&registers.HL.solo.H, memory.Read8(registers.PC++)); }
+void CPU::LD_L_U8() { registers.PC++; LD(&registers.HL.solo.L, memory.Read8(registers.PC++)); }
+void CPU::LD_A_U8() { registers.PC++; LD(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
 
-void CPU::LD_SP_U16() { LD16(&registers.SP, memory.Read16(registers.PC)); }
-void CPU::LD_SP_HL() { LD16(&registers.SP, registers.HL.pair); }
+void CPU::LD_SP_U16() { registers.PC++; LD16(&registers.SP, memory.Read16(registers.PC)); }
+void CPU::LD_SP_HL() { registers.PC++; LD16(&registers.SP, registers.HL.pair); }
 
-void CPU::LD_A_ADDR_BC() { LD(&registers.AF.solo.A, memory.GetHostAddress(registers.BC.pair)); }
-void CPU::LD_A_ADDR_DE() { LD(&registers.AF.solo.A, memory.GetHostAddress(registers.DE.pair)); }
-void CPU::LD_A_ADDR_HLp() {
-    LD(&registers.AF.solo.A, memory.GetHostAddress(registers.HL.pair));
-    registers.HL.pair++;
-}
-void CPU::LD_A_ADDR_HLm() {
-    LD(&registers.AF.solo.A, memory.GetHostAddress(registers.HL.pair));
-    registers.HL.pair--;
-}
-void CPU::LD_A_ADDR_U16() { LD(&registers.AF.solo.A, memory.GetHostAddress(memory.Read16(registers.PC))); }
+void CPU::LD_A_ADDR_BC() { registers.PC++; LD(&registers.AF.solo.A, memory.Read8(registers.BC.pair)); }
+void CPU::LD_A_ADDR_DE() { registers.PC++; LD(&registers.AF.solo.A, memory.Read8(registers.DE.pair)); }
+void CPU::LD_A_ADDR_HLp() { registers.PC++; LD(&registers.AF.solo.A, memory.Read8(registers.HL.pair++)); }
+void CPU::LD_A_ADDR_HLm() { registers.PC++; LD(&registers.AF.solo.A, memory.Read8(registers.HL.pair--)); }
+void CPU::LD_A_ADDR_U16() { registers.PC++; LD(&registers.AF.solo.A, memory.Read8(memory.Read16(registers.PC))); registers.PC += 2; }
 
-void CPU::LD_BC_U16() { LD16(&registers.BC.pair); }
-void CPU::LD_DE_U16() { LD16(&registers.DE.pair); }
-void CPU::LD_HL_U16() { LD16(&registers.HL.pair); }
-void CPU::LD_HL_SPpI8() {
-    registers.HL.pair = registers.SP + (int8_t)memory.Read8(registers.PC);
-}
+void CPU::LD_BC_U16() { registers.PC++; LD16(&registers.BC.pair, memory.Read16(registers.PC)); registers.PC += 2; }
+void CPU::LD_DE_U16() { registers.PC++; LD16(&registers.DE.pair, memory.Read16(registers.PC)); registers.PC += 2; }
+void CPU::LD_HL_U16() { registers.PC++; LD16(&registers.HL.pair, memory.Read16(registers.PC)); registers.PC += 2; }
+void CPU::LD_HL_SPpI8() { registers.PC++; LD16(&registers.HL.pair, registers.SP + (int8_t)memory.Read8(registers.PC++)); }
 
-void CPU::LD_B_B() { LD(&registers.BC.solo.B, &registers.BC.solo.B); }  // Optimizable
-void CPU::LD_B_C() { LD(&registers.BC.solo.B, &registers.BC.solo.C); }
-void CPU::LD_B_D() { LD(&registers.BC.solo.B, &registers.DE.solo.D); }
-void CPU::LD_B_E() { LD(&registers.BC.solo.B, &registers.DE.solo.E); }
-void CPU::LD_B_H() { LD(&registers.BC.solo.B, &registers.HL.solo.H); }
-void CPU::LD_B_L() { LD(&registers.BC.solo.B, &registers.HL.solo.L); }
-void CPU::LD_B_A() { LD(&registers.BC.solo.B, &registers.AF.solo.A); }
+void CPU::LD_B_B() { registers.PC++; LD(&registers.BC.solo.B, registers.BC.solo.B); }
+void CPU::LD_B_C() { registers.PC++; LD(&registers.BC.solo.B, registers.BC.solo.C); }
+void CPU::LD_B_D() { registers.PC++; LD(&registers.BC.solo.B, registers.DE.solo.D); }
+void CPU::LD_B_E() { registers.PC++; LD(&registers.BC.solo.B, registers.DE.solo.E); }
+void CPU::LD_B_H() { registers.PC++; LD(&registers.BC.solo.B, registers.HL.solo.H); }
+void CPU::LD_B_L() { registers.PC++; LD(&registers.BC.solo.B, registers.HL.solo.L); }
+void CPU::LD_B_A() { registers.PC++; LD(&registers.BC.solo.B, registers.AF.solo.A); }
 
-void CPU::LD_C_B() { LD(&registers.BC.solo.C, &registers.BC.solo.B); }
-void CPU::LD_C_C() { LD(&registers.BC.solo.C, &registers.BC.solo.C); }  // Optimizable
-void CPU::LD_C_D() { LD(&registers.BC.solo.C, &registers.DE.solo.D); }
-void CPU::LD_C_E() { LD(&registers.BC.solo.C, &registers.DE.solo.E); }
-void CPU::LD_C_H() { LD(&registers.BC.solo.C, &registers.HL.solo.H); }
-void CPU::LD_C_L() { LD(&registers.BC.solo.C, &registers.HL.solo.L); }
-void CPU::LD_C_A() { LD(&registers.BC.solo.C, &registers.AF.solo.A); }
+void CPU::LD_C_B() { registers.PC++; LD(&registers.BC.solo.C, registers.BC.solo.B); }
+void CPU::LD_C_C() { registers.PC++; LD(&registers.BC.solo.C, registers.BC.solo.C); }
+void CPU::LD_C_D() { registers.PC++; LD(&registers.BC.solo.C, registers.DE.solo.D); }
+void CPU::LD_C_E() { registers.PC++; LD(&registers.BC.solo.C, registers.DE.solo.E); }
+void CPU::LD_C_H() { registers.PC++; LD(&registers.BC.solo.C, registers.HL.solo.H); }
+void CPU::LD_C_L() { registers.PC++; LD(&registers.BC.solo.C, registers.HL.solo.L); }
+void CPU::LD_C_A() { registers.PC++; LD(&registers.BC.solo.C, registers.AF.solo.A); }
 
-void CPU::LD_D_B() { LD(&registers.DE.solo.D, &registers.BC.solo.B); }
-void CPU::LD_D_C() { LD(&registers.DE.solo.D, &registers.BC.solo.C); }
-void CPU::LD_D_D() { LD(&registers.DE.solo.D, &registers.DE.solo.D); }  // Optimizable
-void CPU::LD_D_E() { LD(&registers.DE.solo.D, &registers.DE.solo.E); }
-void CPU::LD_D_H() { LD(&registers.DE.solo.D, &registers.HL.solo.H); }
-void CPU::LD_D_L() { LD(&registers.DE.solo.D, &registers.HL.solo.L); }
-void CPU::LD_D_A() { LD(&registers.DE.solo.D, &registers.AF.solo.A); }
+void CPU::LD_D_B() { registers.PC++; LD(&registers.DE.solo.D, registers.BC.solo.B); }
+void CPU::LD_D_C() { registers.PC++; LD(&registers.DE.solo.D, registers.BC.solo.C); }
+void CPU::LD_D_D() { registers.PC++; LD(&registers.DE.solo.D, registers.DE.solo.D); }
+void CPU::LD_D_E() { registers.PC++; LD(&registers.DE.solo.D, registers.DE.solo.E); }
+void CPU::LD_D_H() { registers.PC++; LD(&registers.DE.solo.D, registers.HL.solo.H); }
+void CPU::LD_D_L() { registers.PC++; LD(&registers.DE.solo.D, registers.HL.solo.L); }
+void CPU::LD_D_A() { registers.PC++; LD(&registers.DE.solo.D, registers.AF.solo.A); }
 
-void CPU::LD_E_B() { LD(&registers.DE.solo.E, &registers.BC.solo.B); }
-void CPU::LD_E_C() { LD(&registers.DE.solo.E, &registers.BC.solo.C); }
-void CPU::LD_E_D() { LD(&registers.DE.solo.E, &registers.DE.solo.D); }
-void CPU::LD_E_E() { LD(&registers.DE.solo.E, &registers.DE.solo.E); }  // Optimizable
-void CPU::LD_E_H() { LD(&registers.DE.solo.E, &registers.HL.solo.H); }
-void CPU::LD_E_L() { LD(&registers.DE.solo.E, &registers.HL.solo.L); }
-void CPU::LD_E_A() { LD(&registers.DE.solo.E, &registers.AF.solo.A); }
+void CPU::LD_E_B() { registers.PC++; LD(&registers.DE.solo.E, registers.BC.solo.B); }
+void CPU::LD_E_C() { registers.PC++; LD(&registers.DE.solo.E, registers.BC.solo.C); }
+void CPU::LD_E_D() { registers.PC++; LD(&registers.DE.solo.E, registers.DE.solo.D); }
+void CPU::LD_E_E() { registers.PC++; LD(&registers.DE.solo.E, registers.DE.solo.E); }
+void CPU::LD_E_H() { registers.PC++; LD(&registers.DE.solo.E, registers.HL.solo.H); }
+void CPU::LD_E_L() { registers.PC++; LD(&registers.DE.solo.E, registers.HL.solo.L); }
+void CPU::LD_E_A() { registers.PC++; LD(&registers.DE.solo.E, registers.AF.solo.A); }
 
-void CPU::LD_H_B() { LD(&registers.HL.solo.H, &registers.BC.solo.B); }
-void CPU::LD_H_C() { LD(&registers.HL.solo.H, &registers.BC.solo.C); }
-void CPU::LD_H_D() { LD(&registers.HL.solo.H, &registers.DE.solo.D); }
-void CPU::LD_H_E() { LD(&registers.HL.solo.H, &registers.DE.solo.E); }
-void CPU::LD_H_H() { LD(&registers.HL.solo.H, &registers.HL.solo.H); }  // Optimizable
-void CPU::LD_H_L() { LD(&registers.HL.solo.H, &registers.HL.solo.L); }
-void CPU::LD_H_A() { LD(&registers.HL.solo.H, &registers.AF.solo.A); }
+void CPU::LD_H_B() { registers.PC++; LD(&registers.HL.solo.H, registers.BC.solo.B); }
+void CPU::LD_H_C() { registers.PC++; LD(&registers.HL.solo.H, registers.BC.solo.C); }
+void CPU::LD_H_D() { registers.PC++; LD(&registers.HL.solo.H, registers.DE.solo.D); }
+void CPU::LD_H_E() { registers.PC++; LD(&registers.HL.solo.H, registers.DE.solo.E); }
+void CPU::LD_H_H() { registers.PC++; LD(&registers.HL.solo.H, registers.HL.solo.H); }
+void CPU::LD_H_L() { registers.PC++; LD(&registers.HL.solo.H, registers.HL.solo.L); }
+void CPU::LD_H_A() { registers.PC++; LD(&registers.HL.solo.H, registers.AF.solo.A); }
 
-void CPU::LD_L_B() { LD(&registers.HL.solo.L, &registers.BC.solo.B); }
-void CPU::LD_L_C() { LD(&registers.HL.solo.L, &registers.BC.solo.C); }
-void CPU::LD_L_D() { LD(&registers.HL.solo.L, &registers.DE.solo.D); }
-void CPU::LD_L_E() { LD(&registers.HL.solo.L, &registers.DE.solo.E); }
-void CPU::LD_L_H() { LD(&registers.HL.solo.L, &registers.HL.solo.H); }
-void CPU::LD_L_L() { LD(&registers.HL.solo.L, &registers.HL.solo.L); }  // Optimizable
-void CPU::LD_L_A() { LD(&registers.HL.solo.L, &registers.AF.solo.A); }
+void CPU::LD_L_B() { registers.PC++; LD(&registers.HL.solo.L, registers.BC.solo.B); }
+void CPU::LD_L_C() { registers.PC++; LD(&registers.HL.solo.L, registers.BC.solo.C); }
+void CPU::LD_L_D() { registers.PC++; LD(&registers.HL.solo.L, registers.DE.solo.D); }
+void CPU::LD_L_E() { registers.PC++; LD(&registers.HL.solo.L, registers.DE.solo.E); }
+void CPU::LD_L_H() { registers.PC++; LD(&registers.HL.solo.L, registers.HL.solo.H); }
+void CPU::LD_L_L() { registers.PC++; LD(&registers.HL.solo.L, registers.HL.solo.L); }
+void CPU::LD_L_A() { registers.PC++; LD(&registers.HL.solo.L, registers.AF.solo.A); }
 
-void CPU::LD_B_ADDR_HL() { LD(&registers.BC.solo.B, memory.GetHostAddress(registers.HL.pair)); }
-void CPU::LD_C_ADDR_HL() { LD(&registers.BC.solo.C, memory.GetHostAddress(registers.HL.pair)); }
-void CPU::LD_D_ADDR_HL() { LD(&registers.DE.solo.D, memory.GetHostAddress(registers.HL.pair)); }
-void CPU::LD_E_ADDR_HL() { LD(&registers.DE.solo.E, memory.GetHostAddress(registers.HL.pair)); }
-void CPU::LD_H_ADDR_HL() { LD(&registers.HL.solo.H, memory.GetHostAddress(registers.HL.pair)); }
-void CPU::LD_L_ADDR_HL() { LD(&registers.HL.solo.L, memory.GetHostAddress(registers.HL.pair)); }
-void CPU::LD_A_ADDR_HL() { LD(&registers.AF.solo.A, memory.GetHostAddress(registers.HL.pair)); }
+void CPU::LD_B_ADDR_HL() { registers.PC++; LD(&registers.BC.solo.B, memory.Read8(registers.HL.pair)); }
+void CPU::LD_C_ADDR_HL() { registers.PC++; LD(&registers.BC.solo.C, memory.Read8(registers.HL.pair)); }
+void CPU::LD_D_ADDR_HL() { registers.PC++; LD(&registers.DE.solo.D, memory.Read8(registers.HL.pair)); }
+void CPU::LD_E_ADDR_HL() { registers.PC++; LD(&registers.DE.solo.E, memory.Read8(registers.HL.pair)); }
+void CPU::LD_H_ADDR_HL() { registers.PC++; LD(&registers.HL.solo.H, memory.Read8(registers.HL.pair)); }
+void CPU::LD_L_ADDR_HL() { registers.PC++; LD(&registers.HL.solo.L, memory.Read8(registers.HL.pair)); }
+void CPU::LD_A_ADDR_HL() { registers.PC++; LD(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
 
-void CPU::LD_ADDR_HL_B() { memory.Write8(registers.HL.pair, registers.BC.solo.B); }
-void CPU::LD_ADDR_HL_C() { memory.Write8(registers.HL.pair, registers.BC.solo.C); }
-void CPU::LD_ADDR_HL_D() { memory.Write8(registers.HL.pair, registers.DE.solo.D); }
-void CPU::LD_ADDR_HL_E() { memory.Write8(registers.HL.pair, registers.DE.solo.E); }
-void CPU::LD_ADDR_HL_H() { memory.Write8(registers.HL.pair, registers.HL.solo.H); }
-void CPU::LD_ADDR_HL_L() { memory.Write8(registers.HL.pair, registers.HL.solo.L); }
-void CPU::LD_ADDR_HL_A() { memory.Write8(registers.HL.pair, registers.AF.solo.A); }
-void CPU::LD_ADDR_BC_A() { memory.Write8(registers.BC.pair, registers.AF.solo.A); }
-void CPU::LD_ADDR_DE_A() { memory.Write8(registers.DE.pair, registers.AF.solo.A); }
-void CPU::LD_ADDR_HLp_A() {
-    memory.Write8(registers.HL.pair, registers.AF.solo.A);
-    registers.HL.pair++;
-}
-void CPU::LD_ADDR_HLm_A() {
-    memory.Write8(registers.HL.pair, registers.AF.solo.A);
-    registers.HL.pair--;
-}
-void CPU::LD_ADDR_U16_A() { memory.Write8(memory.Read16(registers.PC), registers.AF.solo.A); }
-void CPU::LD_ADDR_U16_SP() { memory.Write8(memory.Read16(registers.PC), registers.SP); }
-void CPU::LD_ADDR_HL_U8() { memory.Write8(registers.HL.pair, memory.Read8(registers.PC)); }
+void CPU::LD_ADDR_HL_B() { registers.PC++; memory.Write8(registers.HL.pair, registers.BC.solo.B); }
+void CPU::LD_ADDR_HL_C() { registers.PC++; memory.Write8(registers.HL.pair, registers.BC.solo.C); }
+void CPU::LD_ADDR_HL_D() { registers.PC++; memory.Write8(registers.HL.pair, registers.DE.solo.D); }
+void CPU::LD_ADDR_HL_E() { registers.PC++; memory.Write8(registers.HL.pair, registers.DE.solo.E); }
+void CPU::LD_ADDR_HL_H() { registers.PC++; memory.Write8(registers.HL.pair, registers.HL.solo.H); }
+void CPU::LD_ADDR_HL_L() { registers.PC++; memory.Write8(registers.HL.pair, registers.HL.solo.L); }
+void CPU::LD_ADDR_HL_A() { registers.PC++; memory.Write8(registers.HL.pair, registers.AF.solo.A); }
+void CPU::LD_ADDR_BC_A() { registers.PC++; memory.Write8(registers.BC.pair, registers.AF.solo.A); }
+void CPU::LD_ADDR_DE_A() { registers.PC++; memory.Write8(registers.DE.pair, registers.AF.solo.A); }
+void CPU::LD_ADDR_HLp_A() { registers.PC++; memory.Write8(registers.HL.pair++, registers.AF.solo.A); }
+void CPU::LD_ADDR_HLm_A() { registers.PC++; memory.Write8(registers.HL.pair--, registers.AF.solo.A); }
+void CPU::LD_ADDR_U16_A() { registers.PC++; memory.Write8(memory.Read16(registers.PC), registers.AF.solo.A); registers.PC += 2; }
+void CPU::LD_ADDR_U16_SP() { registers.PC++; memory.Write8(memory.Read16(registers.PC), registers.SP); registers.PC += 2; }
+void CPU::LD_ADDR_HL_U8() { registers.PC++; memory.Write8(registers.HL.pair, memory.Read8(registers.PC++)); }
 
-void CPU::LD_A_B() { LD(&registers.AF.solo.A, &registers.BC.solo.B); }
-void CPU::LD_A_C() { LD(&registers.AF.solo.A, &registers.BC.solo.C); }
-void CPU::LD_A_D() { LD(&registers.AF.solo.A, &registers.DE.solo.D); }
-void CPU::LD_A_E() { LD(&registers.AF.solo.A, &registers.DE.solo.E); }
-void CPU::LD_A_H() { LD(&registers.AF.solo.A, &registers.HL.solo.H); }
-void CPU::LD_A_L() { LD(&registers.AF.solo.A, &registers.HL.solo.L); }
-void CPU::LD_A_A() { LD(&registers.AF.solo.A, &registers.AF.solo.A); }  // Optimizable
+void CPU::LD_A_B() { registers.PC++; LD(&registers.AF.solo.A, registers.BC.solo.B); }
+void CPU::LD_A_C() { registers.PC++; LD(&registers.AF.solo.A, registers.BC.solo.C); }
+void CPU::LD_A_D() { registers.PC++; LD(&registers.AF.solo.A, registers.DE.solo.D); }
+void CPU::LD_A_E() { registers.PC++; LD(&registers.AF.solo.A, registers.DE.solo.E); }
+void CPU::LD_A_H() { registers.PC++; LD(&registers.AF.solo.A, registers.HL.solo.H); }
+void CPU::LD_A_L() { registers.PC++; LD(&registers.AF.solo.A, registers.HL.solo.L); }
+void CPU::LD_A_A() { registers.PC++; LD(&registers.AF.solo.A, registers.AF.solo.A); }
 
-void CPU::LD_OFF_U8_A() { memory.Write8(0xFF00 + memory.Read8(registers.PC), registers.AF.solo.A); }
-void CPU::LD_A_OFF_U8() { LD(&registers.AF.solo.A, memory.GetHostAddress(0xFF00 + memory.Read8(registers.PC))); }
-void CPU::LD_A_OFF_C() { LD(&registers.AF.solo.A, memory.GetHostAddress(0xFF00 + registers.BC.solo.C)); }
-void CPU::LD_OFF_C_A() { memory.Write8(0xFF00 + registers.BC.solo.C, registers.AF.solo.A); }
+void CPU::LD_OFF_U8_A() { registers.PC++; memory.Write8(0xFF00 + memory.Read8(registers.PC++), registers.AF.solo.A); }
+void CPU::LD_A_OFF_U8() { registers.PC++; LD(&registers.AF.solo.A, memory.Read8(0xFF00 + memory.Read8(registers.PC++))); }
+void CPU::LD_A_OFF_C() { registers.PC++; LD(&registers.AF.solo.A, memory.Read8(0xFF00 + registers.BC.solo.C)); }
+void CPU::LD_OFF_C_A() { registers.PC++; memory.Write8(0xFF00 + registers.BC.solo.C, registers.AF.solo.A); }
 
 
 // -- ALU -- 
-void CPU::INC_B() { INC(&registers.BC.solo.B); }
-void CPU::DEC_B() { DEC(&registers.BC.solo.B); }
-void CPU::INC_C() { INC(&registers.BC.solo.C); }
-void CPU::DEC_C() { DEC(&registers.BC.solo.C); }
-void CPU::INC_D() { INC(&registers.DE.solo.D); }
-void CPU::DEC_D() { DEC(&registers.DE.solo.D); }
-void CPU::INC_E() { INC(&registers.DE.solo.E); }
-void CPU::DEC_E() { DEC(&registers.DE.solo.E); }
-void CPU::INC_H() { INC(&registers.HL.solo.H); }
-void CPU::DEC_H() { DEC(&registers.HL.solo.H); }
-void CPU::INC_L() { INC(&registers.HL.solo.L); }
-void CPU::DEC_L() { DEC(&registers.HL.solo.L); }
-void CPU::INC_A() { INC(&registers.AF.solo.A); }
-void CPU::DEC_A() { DEC(&registers.AF.solo.A); }
+void CPU::INC_B() { registers.PC++; INC(&registers.BC.solo.B); }
+void CPU::DEC_B() { registers.PC++; DEC(&registers.BC.solo.B); }
+void CPU::INC_C() { registers.PC++; INC(&registers.BC.solo.C); }
+void CPU::DEC_C() { registers.PC++; DEC(&registers.BC.solo.C); }
+void CPU::INC_D() { registers.PC++; INC(&registers.DE.solo.D); }
+void CPU::DEC_D() { registers.PC++; DEC(&registers.DE.solo.D); }
+void CPU::INC_E() { registers.PC++; INC(&registers.DE.solo.E); }
+void CPU::DEC_E() { registers.PC++; DEC(&registers.DE.solo.E); }
+void CPU::INC_H() { registers.PC++; INC(&registers.HL.solo.H); }
+void CPU::DEC_H() { registers.PC++; DEC(&registers.HL.solo.H); }
+void CPU::INC_L() { registers.PC++; INC(&registers.HL.solo.L); }
+void CPU::DEC_L() { registers.PC++; DEC(&registers.HL.solo.L); }
+void CPU::INC_A() { registers.PC++; INC(&registers.AF.solo.A); }
+void CPU::DEC_A() { registers.PC++; DEC(&registers.AF.solo.A); }
 
-void CPU::INC_BC() { INC16(&registers.BC.solo.B, &registers.BC.solo.C); }
-void CPU::DEC_BC() { DEC16(&registers.BC.solo.B, &registers.BC.solo.C); }
-void CPU::INC_DE() { INC16(&registers.DE.solo.D, &registers.DE.solo.E); }
-void CPU::DEC_DE() { DEC16(&registers.DE.solo.D, &registers.DE.solo.E); }
-void CPU::INC_HL() { INC16(&registers.HL.solo.H, &registers.HL.solo.L); }
-void CPU::DEC_HL() { DEC16(&registers.HL.solo.H, &registers.HL.solo.L); }
-void CPU::INC_SP() { registers.SP++; }
-void CPU::DEC_SP() { registers.SP--; }
+void CPU::INC_BC() { registers.PC++; registers.BC.pair++; }
+void CPU::DEC_BC() { registers.PC++; registers.BC.pair--; }
+void CPU::INC_DE() { registers.PC++; registers.DE.pair++; }
+void CPU::DEC_DE() { registers.PC++; registers.DE.pair--; }
+void CPU::INC_HL() { registers.PC++; registers.HL.pair++; }
+void CPU::DEC_HL() { registers.PC++; registers.HL.pair--; }
+void CPU::INC_SP() { registers.PC++; registers.SP++; }
+void CPU::DEC_SP() { registers.PC++; registers.SP--; }
 
-void CPU::INC_ADDR_HL() { INC(memory.GetHostAddress(registers.HL.pair)); }
-void CPU::DEC_ADDR_HL() { DEC(memory.GetHostAddress(registers.HL.pair)); }
+void CPU::INC_ADDR_HL() { registers.PC++; memory.Write8(registers.HL.pair, memory.Read8(registers.HL.pair) + 1); }
+void CPU::DEC_ADDR_HL() { registers.PC++; memory.Write8(registers.HL.pair, memory.Read8(registers.HL.pair) - 1); }
 
-void CPU::ADD_A_B() { ADD(&registers.AF.solo.A, &registers.BC.solo.B); }
-void CPU::ADD_A_C() { ADD(&registers.AF.solo.A, &registers.BC.solo.C); }
-void CPU::ADD_A_D() { ADD(&registers.AF.solo.A, &registers.DE.solo.D); }
-void CPU::ADD_A_E() { ADD(&registers.AF.solo.A, &registers.DE.solo.E); }
-void CPU::ADD_A_H() { ADD(&registers.AF.solo.A, &registers.HL.solo.H); }
-void CPU::ADD_A_L() { ADD(&registers.AF.solo.A, &registers.HL.solo.L); }
-void CPU::ADD_A_A() { ADD(&registers.AF.solo.A, &registers.AF.solo.A); }  // Optimizable
-void CPU::ADD_A_U8() { ADD(&registers.AF.solo.A, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::ADD_A_ADDR_HL() { ADD(&registers.AF.solo.A, memory.GetHostAddress(registers.HL.pair)); }
+void CPU::ADD_A_B() { registers.PC++; ADD(&registers.AF.solo.A, registers.BC.solo.B); }
+void CPU::ADD_A_C() { registers.PC++; ADD(&registers.AF.solo.A, registers.BC.solo.C); }
+void CPU::ADD_A_D() { registers.PC++; ADD(&registers.AF.solo.A, registers.DE.solo.D); }
+void CPU::ADD_A_E() { registers.PC++; ADD(&registers.AF.solo.A, registers.DE.solo.E); }
+void CPU::ADD_A_H() { registers.PC++; ADD(&registers.AF.solo.A, registers.HL.solo.H); }
+void CPU::ADD_A_L() { registers.PC++; ADD(&registers.AF.solo.A, registers.HL.solo.L); }
+void CPU::ADD_A_A() { registers.PC++; ADD(&registers.AF.solo.A, registers.AF.solo.A); }
+void CPU::ADD_A_U8() { registers.PC++; ADD(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
+void CPU::ADD_A_ADDR_HL() { registers.PC++; ADD(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
 
-void CPU::ADC_A_B() { ADC(&registers.AF.solo.A, &registers.BC.solo.B); }
-void CPU::ADC_A_C() { ADC(&registers.AF.solo.A, &registers.BC.solo.C); }
-void CPU::ADC_A_D() { ADC(&registers.AF.solo.A, &registers.DE.solo.D); }
-void CPU::ADC_A_E() { ADC(&registers.AF.solo.A, &registers.DE.solo.E); }
-void CPU::ADC_A_H() { ADC(&registers.AF.solo.A, &registers.HL.solo.H); }
-void CPU::ADC_A_L() { ADC(&registers.AF.solo.A, &registers.HL.solo.L); }
-void CPU::ADC_A_A() { ADC(&registers.AF.solo.A, &registers.AF.solo.A); }  // Optimizable
-void CPU::ADC_A_U8() { ADC(&registers.AF.solo.A, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::ADC_A_ADDR_HL() { ADC(&registers.AF.solo.A, memory.GetHostAddress(registers.HL.pair)); }
+void CPU::ADC_A_B() { registers.PC++; ADC(&registers.AF.solo.A, registers.BC.solo.B); }
+void CPU::ADC_A_C() { registers.PC++; ADC(&registers.AF.solo.A, registers.BC.solo.C); }
+void CPU::ADC_A_D() { registers.PC++; ADC(&registers.AF.solo.A, registers.DE.solo.D); }
+void CPU::ADC_A_E() { registers.PC++; ADC(&registers.AF.solo.A, registers.DE.solo.E); }
+void CPU::ADC_A_H() { registers.PC++; ADC(&registers.AF.solo.A, registers.HL.solo.H); }
+void CPU::ADC_A_L() { registers.PC++; ADC(&registers.AF.solo.A, registers.HL.solo.L); }
+void CPU::ADC_A_A() { registers.PC++; ADC(&registers.AF.solo.A, registers.AF.solo.A); }
+void CPU::ADC_A_U8() { registers.PC++; ADC(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
+void CPU::ADC_A_ADDR_HL() { registers.PC++; ADC(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
 
-void CPU::ADD_HL_BC() { ADD(registers.HL.pair, registers.BC.pair); }
-void CPU::ADD_HL_DE() { ADD(registers.HL.pair, registers.DE.pair); }
-void CPU::ADD_HL_HL() { ADD(registers.HL.pair, registers.HL.pair); }  // Optimizable
-void CPU::ADD_HL_SP() { ADD(registers.HL.pair, registers.SP); }
+void CPU::ADD_HL_BC() { registers.PC++; ADD16(&registers.HL.pair, registers.BC.pair); }
+void CPU::ADD_HL_DE() { registers.PC++; ADD16(&registers.HL.pair, registers.DE.pair); }
+void CPU::ADD_HL_HL() { registers.PC++; ADD16(&registers.HL.pair, registers.HL.pair); }
+void CPU::ADD_HL_SP() { registers.PC++; ADD16(&registers.HL.pair, registers.SP); }
 void CPU::ADD_SP_I8() {
+    registers.PC++;
     uint32_t res = registers.SP + (int8_t)memory.Read8(registers.PC);
     flags.Z ^= flags.Z;
     flags.N ^= flags.N;
     flags.C = ((res & 0x100000000) != 0);
-    flags.H = (((registers.SP & 0xfff) + ((int8_t)memory.Read8(registers.PC) & 0xfff)) & 0x1000) != 0;
+    flags.H = (((registers.SP & 0xfff) + ((int8_t)memory.Read8(registers.PC++) & 0xfff)) & 0x1000) != 0;
 
     registers.SP = (uint16_t)res;
 }
 
-void CPU::SUB_A_B() { SUB(&registers.AF.solo.A, &registers.BC.solo.B); }
-void CPU::SUB_A_C() { SUB(&registers.AF.solo.A, &registers.BC.solo.C); }
-void CPU::SUB_A_D() { SUB(&registers.AF.solo.A, &registers.DE.solo.D); }
-void CPU::SUB_A_E() { SUB(&registers.AF.solo.A, &registers.DE.solo.E); }
-void CPU::SUB_A_H() { SUB(&registers.AF.solo.A, &registers.HL.solo.H); }
-void CPU::SUB_A_L() { SUB(&registers.AF.solo.A, &registers.HL.solo.L); }
-void CPU::SUB_A_A() { SUB(&registers.AF.solo.A, &registers.AF.solo.A); }
-void CPU::SUB_A_U8() { SUB(&registers.AF.solo.A, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::SUB_A_ADDR_HL() { SUB(&registers.AF.solo.A, memory.GetHostAddress(registers.HL.pair)); }
+void CPU::SUB_A_B() { registers.PC++; SUB(&registers.AF.solo.A, registers.BC.solo.B); }
+void CPU::SUB_A_C() { registers.PC++; SUB(&registers.AF.solo.A, registers.BC.solo.C); }
+void CPU::SUB_A_D() { registers.PC++; SUB(&registers.AF.solo.A, registers.DE.solo.D); }
+void CPU::SUB_A_E() { registers.PC++; SUB(&registers.AF.solo.A, registers.DE.solo.E); }
+void CPU::SUB_A_H() { registers.PC++; SUB(&registers.AF.solo.A, registers.HL.solo.H); }
+void CPU::SUB_A_L() { registers.PC++; SUB(&registers.AF.solo.A, registers.HL.solo.L); }
+void CPU::SUB_A_A() { registers.PC++; SUB(&registers.AF.solo.A, registers.AF.solo.A); }
+void CPU::SUB_A_U8() { registers.PC++; SUB(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
+void CPU::SUB_A_ADDR_HL() { registers.PC++; SUB(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
 
-void CPU::SBC_A_B() { SBC(&registers.AF.solo.A, &registers.BC.solo.B); }
-void CPU::SBC_A_C() { SBC(&registers.AF.solo.A, &registers.BC.solo.C); }
-void CPU::SBC_A_D() { SBC(&registers.AF.solo.A, &registers.DE.solo.D); }
-void CPU::SBC_A_E() { SBC(&registers.AF.solo.A, &registers.DE.solo.E); }
-void CPU::SBC_A_H() { SBC(&registers.AF.solo.A, &registers.HL.solo.H); }
-void CPU::SBC_A_L() { SBC(&registers.AF.solo.A, &registers.HL.solo.L); }
-void CPU::SBC_A_A() { SBC(&registers.AF.solo.A, &registers.AF.solo.A); }  // Optimizable
-void CPU::SBC_A_U8() { SBC(&registers.AF.solo.A, memory.GetHostAddress(registers.PC + 1)); }
-void CPU::SBC_A_ADDR_HL() { SBC(&registers.AF.solo.A, memory.GetHostAddress(registers.HL.pair)); }
+void CPU::SBC_A_B() { registers.PC++; SBC(&registers.AF.solo.A, registers.BC.solo.B); }
+void CPU::SBC_A_C() { registers.PC++; SBC(&registers.AF.solo.A, registers.BC.solo.C); }
+void CPU::SBC_A_D() { registers.PC++; SBC(&registers.AF.solo.A, registers.DE.solo.D); }
+void CPU::SBC_A_E() { registers.PC++; SBC(&registers.AF.solo.A, registers.DE.solo.E); }
+void CPU::SBC_A_H() { registers.PC++; SBC(&registers.AF.solo.A, registers.HL.solo.H); }
+void CPU::SBC_A_L() { registers.PC++; SBC(&registers.AF.solo.A, registers.HL.solo.L); }
+void CPU::SBC_A_A() { registers.PC++; SBC(&registers.AF.solo.A, registers.AF.solo.A); }
+void CPU::SBC_A_U8() { registers.PC++; SBC(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
+void CPU::SBC_A_ADDR_HL() { registers.PC++; SBC(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
 
 void CPU::AND_A_B() { AND(&registers.AF.solo.A, &registers.BC.solo.B); }
 void CPU::AND_A_C() { AND(&registers.AF.solo.A, &registers.BC.solo.C); }

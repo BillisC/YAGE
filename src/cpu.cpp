@@ -69,12 +69,12 @@ void CPU::MemoryDump() {
 }
 
 void CPU::Fetch() {
-    uint16_t chk = *memory.GetHostAddress(registers.PC);
-    registers.PC += (chk == 0xCB);
+    bool chk = memory.Read8(registers.PC) == 0xCB;
+    registers.PC += chk;
 
     uint16_t opcode = memory.Read16(registers.PC);
     registers.PC += 2;
 
-    if (chk != 0xCB) ((*this).*(InstructionTable[opcode].ipr))();
+    if (!chk) ((*this).*(InstructionTable[opcode].ipr))();
     else ((*this).*(CB_InstructionTable[opcode].ipr))();
 }

@@ -34,17 +34,12 @@ void Memory::Read(const uint16_t loc, uint8_t* buffer, const size_t size) {
 }
 
 uint8_t Memory::Read8(const uint16_t loc) {
-    return *memory[loc + 1];
+    return *memory[loc];
 }
 
 uint16_t Memory::Read16(const uint16_t loc) {
-    return (*memory[loc + 2] << 8) | *memory[loc + 1];
+    return (*memory[loc + 1] << 8) | *memory[loc];
 }
-
-uint8_t* Memory::GetHostAddress(const uint16_t loc) {
-    return memory[loc];
-}
-
 
 // Checks
 bool Memory::VerifyLogo() {

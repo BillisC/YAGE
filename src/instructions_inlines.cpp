@@ -1,63 +1,59 @@
 #include "cpu.h"
 
 
-// -- LOAD --
-void CPU::LD(uint8_t* dst, uint8_t* src) {
-    *dst = *src;
+// -- LOAD -- Will be removed in future
+void CPU::LD(uint8_t* dst, uint8_t src) {
+    *dst = src;
 }
 void CPU::LD16(uint16_t* dst, uint16_t src) {
     *dst = src;
 }
-void CPU::LD16(uint16_t* pair) {
-    *pair = memory.Read16(registers.PC);
-}
-
 
 // -- ALU --
-void CPU::ADD(uint8_t* dst, uint8_t* num) {
-    uint16_t res = *dst + *num;
+void CPU::ADD(uint8_t* dst, uint8_t num) {
+    uint16_t res = *dst + num;
 
     flags.Z = (res == 0);
     flags.N ^= flags.N;
     flags.C = (res & 0x100) != 0;
-    flags.H = (((*dst & 0xf) + (*num & 0xf)) & 0x10) != 0;
+    flags.H = (((*dst & 0xf) + (num & 0xf)) & 0x10) != 0;
 
     *dst = (uint8_t)res;
 }
-void CPU::ADD(uint16_t dst, uint16_t num) {
-    uint32_t res = dst + num;
+void CPU::ADD16(uint16_t *dst, uint16_t num) {
+    uint32_t res = *dst + num;
 
     flags.N ^= flags.N;
     flags.C = (res & 0x100000000) != 0;
-    flags.H = (((dst & 0xfff) + (num & 0xfff)) & 0x1000) != 0;
+    flags.H = (((*dst & 0xfff) + (num & 0xfff)) & 0x1000) != 0;
 
-    registers.H = (res >> 8); registers.L = res;
+    *dst = (uint16_t)res;
 }
-void CPU::ADC(uint8_t* dst, uint8_t* num) {
-    uint16_t res = *dst + *num;
+void CPU::ADC(uint8_t* dst, uint8_t num) {
+    uint16_t res = *dst + num;
 
     flags.Z = (res == 0);
     flags.N ^= flags.N;
     flags.C = (res & 0x100) != 0;
-    flags.H = (((*dst & 0xf) + (*num & 0xf) + (flags.C & 0xf)) & 0x10) != 0;
+    flags.H = (((*dst & 0xf) + (num & 0xf) + (flags.C & 0xf)) & 0x10) != 0;
 
     *dst = (uint8_t)res;
 }
-void CPU::SUB(uint8_t* dst, uint8_t* num) {
-    uint16_t res = *dst - *num;
+void CPU::SUB(uint8_t* dst, uint8_t num) {
+    uint16_t res = *dst - num;
     flags.Z = (res == 0);
     flags.N = 1;
     flags.C = (res & 0x100) != 0;
-    flags.H = (((*dst & 0xf) - (*num & 0xf)) & 0x10) != 0;
+    flags.H = (((*dst & 0xf) - (num & 0xf)) & 0x10) != 0;
 
     *dst = (uint8_t)res;
 }
-void CPU::SBC(uint8_t* dst, uint8_t* num) {
-    uint16_t res = *dst - *num;
+void CPU::SBC(uint8_t* dst, uint8_t num) {
+    uint16_t res = *dst - num;
     flags.Z = (res == 0);
     flags.N = 1;
     flags.C = (res & 0x100) != 0;
-    flags.H = (((*dst & 0xf) - (*num & 0xf) - (flags.C & 0xf)) & 0x10) != 0;
+    flags.H = (((*dst & 0xf) - (num & 0xf) - (flags.C & 0xf)) & 0x10) != 0;
 
     *dst = (uint8_t)res;
 }
@@ -78,14 +74,6 @@ void CPU::DEC(uint8_t* dst) {
     flags.H = (((*dst & 0xf) - 1) & 0x10) != 0;
 
     (*dst)--;
-}
-void CPU::INC16(uint8_t* hreg, uint8_t* lreg) {
-    uint16_t res = ((*hreg << 8) | *lreg) + 1;
-    *hreg = res >> 8; *lreg = (uint8_t)res;
-}
-void CPU::DEC16(uint8_t* hreg, uint8_t* lreg) {
-    uint16_t res = ((*hreg << 8) | *lreg) - 1;
-    *hreg = res >> 8; *lreg = (uint8_t)res;
 }
 
 void CPU::AND(uint8_t* dst, uint8_t* num) {

@@ -79,15 +79,14 @@ public:
 
 private:
     // Generic Functions
-    void LD(uint8_t* dst, uint8_t* src);
+    void LD(uint8_t* dst, uint8_t src);
     void LD16(uint16_t* dst, uint16_t src);
-    void LD16(uint16_t* pair);
 
-    void ADD(uint8_t* dst, uint8_t* num);
-    void ADD(uint16_t dst, uint16_t num);
-    void ADC(uint8_t* dst, uint8_t* num);
-    void SUB(uint8_t* dst, uint8_t* num);
-    void SBC(uint8_t* dst, uint8_t* num);
+    void ADD(uint8_t* dst, uint8_t num);
+    void ADD16(uint16_t *dst, uint16_t num);
+    void ADC(uint8_t* dst, uint8_t num);
+    void SUB(uint8_t* dst, uint8_t num);
+    void SBC(uint8_t* dst, uint8_t num);
 
     void INC(uint8_t* dst);
     void DEC(uint8_t* dst);
