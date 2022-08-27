@@ -8,9 +8,8 @@ void CPU::LD(uint8_t* dst, uint8_t* src) {
 void CPU::LD16(uint16_t* dst, uint16_t src) {
     *dst = src;
 }
-void CPU::LD16(uint8_t* regH, uint8_t* regL) {
-    *regH = memory.Read8(registers.PC + 1);
-    *regL = memory.Read8(registers.PC);
+void CPU::LD16(uint16_t* pair) {
+    *pair = memory.Read16(registers.PC);
 }
 
 

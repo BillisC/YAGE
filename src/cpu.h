@@ -22,10 +22,36 @@ struct Flags {
 };
 
 struct Registers {
-    uint8_t A, B, C, D, E, F, H, L;
-    uint16_t PC, SP;
+    union B_C {
+        struct registers {
+            uint8_t C;
+            uint8_t B;
+        } solo;
+        uint16_t pair;
+    } BC;
+    union D_E {
+        struct registers {
+            uint8_t E;
+            uint8_t D;
+        } solo;
+        uint16_t pair;
+    } DE;
+    union H_L {
+        struct registers {
+            uint8_t L;
+            uint8_t H;
+        } solo;
+        uint16_t pair;
+    } HL;
+    union A_F {
+        struct registers {
+            uint8_t F;
+            uint8_t A;
+        } solo;
+        uint16_t pair;
+    } AF;
 
-    uint16_t Pair(uint8_t& regH, uint8_t& regL) { return ((regH << 8) | regL); }
+    uint16_t PC, SP;
 };
 
 class CPU {
@@ -55,7 +81,7 @@ private:
     // Generic Functions
     void LD(uint8_t* dst, uint8_t* src);
     void LD16(uint16_t* dst, uint16_t src);
-    void LD16(uint8_t* regH, uint8_t* regL);
+    void LD16(uint16_t* pair);
 
     void ADD(uint8_t* dst, uint8_t* num);
     void ADD(uint16_t dst, uint16_t num);

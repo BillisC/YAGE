@@ -7,10 +7,10 @@ CPU::CPU() {
 
 void CPU::Init() {
     // Initial register values
-    registers.A = 0x01; registers.F = 0xB0;
-    registers.B = 0x00; registers.C = 0x13;
-    registers.D = 0x00; registers.E = 0xD8;
-    registers.H = 0x01; registers.L = 0x4D;
+    registers.AF.solo.A = 0x01; registers.AF.solo.F = 0xB0;
+    registers.BC.solo.B = 0x00; registers.BC.solo.C = 0x13;
+    registers.DE.solo.D = 0x00; registers.DE.solo.E = 0xD8;
+    registers.HL.solo.H = 0x01; registers.HL.solo.L = 0x4D;
     registers.SP = 0xFFFE;
     registers.PC = 0x100;
 
@@ -46,7 +46,7 @@ int CPU::LoadCatridge(const std::string file_name) {
     printf("Checksum: %02x\n", cartridge.checksum_global[0]);
 
     /* Copy catridge in memory */
-    memory.Write(0x0, buffer, file_size);
+    // BAD memory.Write(0x0, buffer, file_size);
 
     /* Close the ROM */
     rom.close();
@@ -72,10 +72,9 @@ void CPU::Fetch() {
     uint16_t chk = *memory.GetHostAddress(registers.PC);
     registers.PC += (chk == 0xCB);
 
-    uint16_t opcode = memory.Read16(registers.PC - 1);
+    uint16_t opcode = memory.Read16(registers.PC);
+    registers.PC += 2;
 
     if (chk != 0xCB) ((*this).*(InstructionTable[opcode].ipr))();
     else ((*this).*(CB_InstructionTable[opcode].ipr))();
-
-    registers.PC += InstructionTable[opcode].bytes;
 }
