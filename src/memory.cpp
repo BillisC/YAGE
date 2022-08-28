@@ -10,7 +10,6 @@ void Memory::Clear() {
     memset(memory, 0, 0xFFFF);
 }
 
-
 // Write Operations
 void Memory::Write(const uint16_t loc, uint8_t* buffer, const size_t size) {
     memcpy(memory + loc, buffer, size);
@@ -26,7 +25,6 @@ void Memory::Write8(const uint16_t loc, const uint8_t byte) {
     }
 
 }
-
 
 // Read Operations
 void Memory::Read(const uint16_t loc, uint8_t* buffer, const size_t size) {

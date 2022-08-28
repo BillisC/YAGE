@@ -38,7 +38,7 @@ int CPU::LoadCatridge(const std::string file_name) {
     /* Buffer catridge data */
     uint8_t buffer[file_size];
     rom.read(reinterpret_cast<char*>(buffer), file_size);
-    
+
     /* Copy catridge header in struct as is */
     memcpy(&cartridge, buffer + 0x134, 0x1B);
     printf("Title: %s\n", cartridge.title);

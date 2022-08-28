@@ -4,83 +4,83 @@
 void CPU::NOP() {}
 
 // -- LOAD --
-void CPU::LD_B_U8() { LD(&registers.BC.solo.B, memory.Read8(registers.PC++)); }
-void CPU::LD_C_U8() { LD(&registers.BC.solo.C, memory.Read8(registers.PC++)); }
-void CPU::LD_D_U8() { LD(&registers.DE.solo.D, memory.Read8(registers.PC++)); }
-void CPU::LD_E_U8() { LD(&registers.DE.solo.E, memory.Read8(registers.PC++)); }
-void CPU::LD_H_U8() { LD(&registers.HL.solo.H, memory.Read8(registers.PC++)); }
-void CPU::LD_L_U8() { LD(&registers.HL.solo.L, memory.Read8(registers.PC++)); }
-void CPU::LD_A_U8() { LD(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
+void CPU::LD_B_U8() { registers.BC.solo.B = memory.Read8(registers.PC++); }
+void CPU::LD_C_U8() { registers.BC.solo.C = memory.Read8(registers.PC++); }
+void CPU::LD_D_U8() { registers.DE.solo.D = memory.Read8(registers.PC++); }
+void CPU::LD_E_U8() { registers.DE.solo.E = memory.Read8(registers.PC++); }
+void CPU::LD_H_U8() { registers.HL.solo.H = memory.Read8(registers.PC++); }
+void CPU::LD_L_U8() { registers.HL.solo.L = memory.Read8(registers.PC++); }
+void CPU::LD_A_U8() { registers.AF.solo.A = memory.Read8(registers.PC++); }
 
-void CPU::LD_SP_U16() { LD16(&registers.SP, memory.Read16(registers.PC)); }
-void CPU::LD_SP_HL() { LD16(&registers.SP, registers.HL.pair); }
+void CPU::LD_SP_U16() { registers.SP = memory.Read16(registers.PC); }
+void CPU::LD_SP_HL() { registers.SP = registers.HL.pair; }
 
-void CPU::LD_A_ADDR_BC() { LD(&registers.AF.solo.A, memory.Read8(registers.BC.pair)); }
-void CPU::LD_A_ADDR_DE() { LD(&registers.AF.solo.A, memory.Read8(registers.DE.pair)); }
-void CPU::LD_A_ADDR_HLp() { LD(&registers.AF.solo.A, memory.Read8(registers.HL.pair++)); }
-void CPU::LD_A_ADDR_HLm() { LD(&registers.AF.solo.A, memory.Read8(registers.HL.pair--)); }
-void CPU::LD_A_ADDR_U16() { LD(&registers.AF.solo.A, memory.Read8(memory.Read16(registers.PC))); registers.PC += 2; }
+void CPU::LD_A_ADDR_BC() { registers.AF.solo.A = memory.Read8(registers.BC.pair); }
+void CPU::LD_A_ADDR_DE() { registers.AF.solo.A = memory.Read8(registers.DE.pair); }
+void CPU::LD_A_ADDR_HLp() { registers.AF.solo.A = memory.Read8(registers.HL.pair++); }
+void CPU::LD_A_ADDR_HLm() { registers.AF.solo.A = memory.Read8(registers.HL.pair--); }
+void CPU::LD_A_ADDR_U16() { registers.AF.solo.A = memory.Read8(memory.Read16(registers.PC)); registers.PC += 2; }
 
-void CPU::LD_BC_U16() { LD16(&registers.BC.pair, memory.Read16(registers.PC)); registers.PC += 2; }
-void CPU::LD_DE_U16() { LD16(&registers.DE.pair, memory.Read16(registers.PC)); registers.PC += 2; }
-void CPU::LD_HL_U16() { LD16(&registers.HL.pair, memory.Read16(registers.PC)); registers.PC += 2; }
-void CPU::LD_HL_SPpI8() { LD16(&registers.HL.pair, registers.SP + (int8_t)memory.Read8(registers.PC++)); }
+void CPU::LD_BC_U16() { registers.BC.pair = memory.Read16(registers.PC); registers.PC += 2; }
+void CPU::LD_DE_U16() { registers.DE.pair = memory.Read16(registers.PC); registers.PC += 2; }
+void CPU::LD_HL_U16() { registers.HL.pair = memory.Read16(registers.PC); registers.PC += 2; }
+void CPU::LD_HL_SPpI8() { registers.HL.pair, registers.SP + (int8_t)memory.Read8(registers.PC++); }
 
-void CPU::LD_B_B() { LD(&registers.BC.solo.B, registers.BC.solo.B); }
-void CPU::LD_B_C() { LD(&registers.BC.solo.B, registers.BC.solo.C); }
-void CPU::LD_B_D() { LD(&registers.BC.solo.B, registers.DE.solo.D); }
-void CPU::LD_B_E() { LD(&registers.BC.solo.B, registers.DE.solo.E); }
-void CPU::LD_B_H() { LD(&registers.BC.solo.B, registers.HL.solo.H); }
-void CPU::LD_B_L() { LD(&registers.BC.solo.B, registers.HL.solo.L); }
-void CPU::LD_B_A() { LD(&registers.BC.solo.B, registers.AF.solo.A); }
+void CPU::LD_B_B() { registers.BC.solo.B = registers.BC.solo.B; }
+void CPU::LD_B_C() { registers.BC.solo.B = registers.BC.solo.C; }
+void CPU::LD_B_D() { registers.BC.solo.B = registers.DE.solo.D; }
+void CPU::LD_B_E() { registers.BC.solo.B = registers.DE.solo.E; }
+void CPU::LD_B_H() { registers.BC.solo.B = registers.HL.solo.H; }
+void CPU::LD_B_L() { registers.BC.solo.B = registers.HL.solo.L; }
+void CPU::LD_B_A() { registers.BC.solo.B = registers.AF.solo.A; }
 
-void CPU::LD_C_B() { LD(&registers.BC.solo.C, registers.BC.solo.B); }
-void CPU::LD_C_C() { LD(&registers.BC.solo.C, registers.BC.solo.C); }
-void CPU::LD_C_D() { LD(&registers.BC.solo.C, registers.DE.solo.D); }
-void CPU::LD_C_E() { LD(&registers.BC.solo.C, registers.DE.solo.E); }
-void CPU::LD_C_H() { LD(&registers.BC.solo.C, registers.HL.solo.H); }
-void CPU::LD_C_L() { LD(&registers.BC.solo.C, registers.HL.solo.L); }
-void CPU::LD_C_A() { LD(&registers.BC.solo.C, registers.AF.solo.A); }
+void CPU::LD_C_B() { registers.BC.solo.C = registers.BC.solo.B; }
+void CPU::LD_C_C() { registers.BC.solo.C = registers.BC.solo.C; }
+void CPU::LD_C_D() { registers.BC.solo.C = registers.DE.solo.D; }
+void CPU::LD_C_E() { registers.BC.solo.C = registers.DE.solo.E; }
+void CPU::LD_C_H() { registers.BC.solo.C = registers.HL.solo.H; }
+void CPU::LD_C_L() { registers.BC.solo.C = registers.HL.solo.L; }
+void CPU::LD_C_A() { registers.BC.solo.C = registers.AF.solo.A; }
 
-void CPU::LD_D_B() { LD(&registers.DE.solo.D, registers.BC.solo.B); }
-void CPU::LD_D_C() { LD(&registers.DE.solo.D, registers.BC.solo.C); }
-void CPU::LD_D_D() { LD(&registers.DE.solo.D, registers.DE.solo.D); }
-void CPU::LD_D_E() { LD(&registers.DE.solo.D, registers.DE.solo.E); }
-void CPU::LD_D_H() { LD(&registers.DE.solo.D, registers.HL.solo.H); }
-void CPU::LD_D_L() { LD(&registers.DE.solo.D, registers.HL.solo.L); }
-void CPU::LD_D_A() { LD(&registers.DE.solo.D, registers.AF.solo.A); }
+void CPU::LD_D_B() { registers.DE.solo.D = registers.BC.solo.B; }
+void CPU::LD_D_C() { registers.DE.solo.D = registers.BC.solo.C; }
+void CPU::LD_D_D() { registers.DE.solo.D = registers.DE.solo.D; }
+void CPU::LD_D_E() { registers.DE.solo.D = registers.DE.solo.E; }
+void CPU::LD_D_H() { registers.DE.solo.D = registers.HL.solo.H; }
+void CPU::LD_D_L() { registers.DE.solo.D = registers.HL.solo.L; }
+void CPU::LD_D_A() { registers.DE.solo.D = registers.AF.solo.A; }
 
-void CPU::LD_E_B() { LD(&registers.DE.solo.E, registers.BC.solo.B); }
-void CPU::LD_E_C() { LD(&registers.DE.solo.E, registers.BC.solo.C); }
-void CPU::LD_E_D() { LD(&registers.DE.solo.E, registers.DE.solo.D); }
-void CPU::LD_E_E() { LD(&registers.DE.solo.E, registers.DE.solo.E); }
-void CPU::LD_E_H() { LD(&registers.DE.solo.E, registers.HL.solo.H); }
-void CPU::LD_E_L() { LD(&registers.DE.solo.E, registers.HL.solo.L); }
-void CPU::LD_E_A() { LD(&registers.DE.solo.E, registers.AF.solo.A); }
+void CPU::LD_E_B() { registers.DE.solo.E = registers.BC.solo.B; }
+void CPU::LD_E_C() { registers.DE.solo.E = registers.BC.solo.C; }
+void CPU::LD_E_D() { registers.DE.solo.E = registers.DE.solo.D; }
+void CPU::LD_E_E() { registers.DE.solo.E = registers.DE.solo.E; }
+void CPU::LD_E_H() { registers.DE.solo.E = registers.HL.solo.H; }
+void CPU::LD_E_L() { registers.DE.solo.E = registers.HL.solo.L; }
+void CPU::LD_E_A() { registers.DE.solo.E = registers.AF.solo.A; }
 
-void CPU::LD_H_B() { LD(&registers.HL.solo.H, registers.BC.solo.B); }
-void CPU::LD_H_C() { LD(&registers.HL.solo.H, registers.BC.solo.C); }
-void CPU::LD_H_D() { LD(&registers.HL.solo.H, registers.DE.solo.D); }
-void CPU::LD_H_E() { LD(&registers.HL.solo.H, registers.DE.solo.E); }
-void CPU::LD_H_H() { LD(&registers.HL.solo.H, registers.HL.solo.H); }
-void CPU::LD_H_L() { LD(&registers.HL.solo.H, registers.HL.solo.L); }
-void CPU::LD_H_A() { LD(&registers.HL.solo.H, registers.AF.solo.A); }
+void CPU::LD_H_B() { registers.HL.solo.H = registers.BC.solo.B; }
+void CPU::LD_H_C() { registers.HL.solo.H = registers.BC.solo.C; }
+void CPU::LD_H_D() { registers.HL.solo.H = registers.DE.solo.D; }
+void CPU::LD_H_E() { registers.HL.solo.H = registers.DE.solo.E; }
+void CPU::LD_H_H() { registers.HL.solo.H = registers.HL.solo.H; }
+void CPU::LD_H_L() { registers.HL.solo.H = registers.HL.solo.L; }
+void CPU::LD_H_A() { registers.HL.solo.H = registers.AF.solo.A; }
 
-void CPU::LD_L_B() { LD(&registers.HL.solo.L, registers.BC.solo.B); }
-void CPU::LD_L_C() { LD(&registers.HL.solo.L, registers.BC.solo.C); }
-void CPU::LD_L_D() { LD(&registers.HL.solo.L, registers.DE.solo.D); }
-void CPU::LD_L_E() { LD(&registers.HL.solo.L, registers.DE.solo.E); }
-void CPU::LD_L_H() { LD(&registers.HL.solo.L, registers.HL.solo.H); }
-void CPU::LD_L_L() { LD(&registers.HL.solo.L, registers.HL.solo.L); }
-void CPU::LD_L_A() { LD(&registers.HL.solo.L, registers.AF.solo.A); }
+void CPU::LD_L_B() { registers.HL.solo.L = registers.BC.solo.B; }
+void CPU::LD_L_C() { registers.HL.solo.L = registers.BC.solo.C; }
+void CPU::LD_L_D() { registers.HL.solo.L = registers.DE.solo.D; }
+void CPU::LD_L_E() { registers.HL.solo.L = registers.DE.solo.E; }
+void CPU::LD_L_H() { registers.HL.solo.L = registers.HL.solo.H; }
+void CPU::LD_L_L() { registers.HL.solo.L = registers.HL.solo.L; }
+void CPU::LD_L_A() { registers.HL.solo.L = registers.AF.solo.A; }
 
-void CPU::LD_B_ADDR_HL() { LD(&registers.BC.solo.B, memory.Read8(registers.HL.pair)); }
-void CPU::LD_C_ADDR_HL() { LD(&registers.BC.solo.C, memory.Read8(registers.HL.pair)); }
-void CPU::LD_D_ADDR_HL() { LD(&registers.DE.solo.D, memory.Read8(registers.HL.pair)); }
-void CPU::LD_E_ADDR_HL() { LD(&registers.DE.solo.E, memory.Read8(registers.HL.pair)); }
-void CPU::LD_H_ADDR_HL() { LD(&registers.HL.solo.H, memory.Read8(registers.HL.pair)); }
-void CPU::LD_L_ADDR_HL() { LD(&registers.HL.solo.L, memory.Read8(registers.HL.pair)); }
-void CPU::LD_A_ADDR_HL() { LD(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
+void CPU::LD_B_ADDR_HL() { registers.BC.solo.B = memory.Read8(registers.HL.pair); }
+void CPU::LD_C_ADDR_HL() { registers.BC.solo.C = memory.Read8(registers.HL.pair); }
+void CPU::LD_D_ADDR_HL() { registers.DE.solo.D = memory.Read8(registers.HL.pair); }
+void CPU::LD_E_ADDR_HL() { registers.DE.solo.E = memory.Read8(registers.HL.pair); }
+void CPU::LD_H_ADDR_HL() { registers.HL.solo.H = memory.Read8(registers.HL.pair); }
+void CPU::LD_L_ADDR_HL() { registers.HL.solo.L = memory.Read8(registers.HL.pair); }
+void CPU::LD_A_ADDR_HL() { registers.AF.solo.A = memory.Read8(registers.HL.pair); }
 
 void CPU::LD_ADDR_HL_B() { memory.Write8(registers.HL.pair, registers.BC.solo.B); }
 void CPU::LD_ADDR_HL_C() { memory.Write8(registers.HL.pair, registers.BC.solo.C); }
@@ -97,21 +97,42 @@ void CPU::LD_ADDR_U16_A() { memory.Write8(memory.Read16(registers.PC), registers
 void CPU::LD_ADDR_U16_SP() { memory.Write8(memory.Read16(registers.PC), registers.SP); registers.PC += 2; }
 void CPU::LD_ADDR_HL_U8() { memory.Write8(registers.HL.pair, memory.Read8(registers.PC++)); }
 
-void CPU::LD_A_B() { LD(&registers.AF.solo.A, registers.BC.solo.B); }
-void CPU::LD_A_C() { LD(&registers.AF.solo.A, registers.BC.solo.C); }
-void CPU::LD_A_D() { LD(&registers.AF.solo.A, registers.DE.solo.D); }
-void CPU::LD_A_E() { LD(&registers.AF.solo.A, registers.DE.solo.E); }
-void CPU::LD_A_H() { LD(&registers.AF.solo.A, registers.HL.solo.H); }
-void CPU::LD_A_L() { LD(&registers.AF.solo.A, registers.HL.solo.L); }
-void CPU::LD_A_A() { LD(&registers.AF.solo.A, registers.AF.solo.A); }
+void CPU::LD_A_B() { registers.AF.solo.A = registers.BC.solo.B; }
+void CPU::LD_A_C() { registers.AF.solo.A = registers.BC.solo.C; }
+void CPU::LD_A_D() { registers.AF.solo.A = registers.DE.solo.D; }
+void CPU::LD_A_E() { registers.AF.solo.A = registers.DE.solo.E; }
+void CPU::LD_A_H() { registers.AF.solo.A = registers.HL.solo.H; }
+void CPU::LD_A_L() { registers.AF.solo.A = registers.HL.solo.L; }
+void CPU::LD_A_A() { registers.AF.solo.A = registers.AF.solo.A; }
 
 void CPU::LD_OFF_U8_A() { memory.Write8(0xFF00 + memory.Read8(registers.PC++), registers.AF.solo.A); }
-void CPU::LD_A_OFF_U8() { LD(&registers.AF.solo.A, memory.Read8(0xFF00 + memory.Read8(registers.PC++))); }
-void CPU::LD_A_OFF_C() { LD(&registers.AF.solo.A, memory.Read8(0xFF00 + registers.BC.solo.C)); }
+void CPU::LD_A_OFF_U8() { registers.AF.solo.A = memory.Read8(0xFF00 + memory.Read8(registers.PC++)); }
+void CPU::LD_A_OFF_C() { registers.AF.solo.A = memory.Read8(0xFF00 + registers.BC.solo.C); }
 void CPU::LD_OFF_C_A() { memory.Write8(0xFF00 + registers.BC.solo.C, registers.AF.solo.A); }
 
-
 // -- ALU -- 
+void CPU::DAA() {
+    if (!get_flag(NEG)) {
+        if (get_flag(CARRY) || (registers.AF.solo.A > 0x99)) { 
+            registers.AF.solo.A += 0x60; set_flag(CARRY, 1); 
+        }
+        if (get_flag(HALF) || ((registers.AF.solo.A & 0x0F) > 0x09)) { 
+            registers.AF.solo.A += 0x06; 
+        }
+    } 
+    else {
+        if (get_flag(CARRY)) { 
+            registers.AF.solo.A -= 0x60; 
+        }
+        if (get_flag(HALF)) { 
+            registers.AF.solo.A -= 0x06; 
+        }
+    }
+
+    set_flag(ZERO, (registers.AF.solo.A == 0));
+    set_flag(HALF, 0);
+}
+
 void CPU::INC_B() { INC(&registers.BC.solo.B); }
 void CPU::DEC_B() { DEC(&registers.BC.solo.B); }
 void CPU::INC_C() { INC(&registers.BC.solo.C); }
@@ -139,25 +160,25 @@ void CPU::DEC_SP() { registers.SP--; }
 void CPU::INC_ADDR_HL() { memory.Write8(registers.HL.pair, memory.Read8(registers.HL.pair) + 1); }
 void CPU::DEC_ADDR_HL() { memory.Write8(registers.HL.pair, memory.Read8(registers.HL.pair) - 1); }
 
-void CPU::ADD_A_B() { ADD(&registers.AF.solo.A, registers.BC.solo.B); }
-void CPU::ADD_A_C() { ADD(&registers.AF.solo.A, registers.BC.solo.C); }
-void CPU::ADD_A_D() { ADD(&registers.AF.solo.A, registers.DE.solo.D); }
-void CPU::ADD_A_E() { ADD(&registers.AF.solo.A, registers.DE.solo.E); }
-void CPU::ADD_A_H() { ADD(&registers.AF.solo.A, registers.HL.solo.H); }
-void CPU::ADD_A_L() { ADD(&registers.AF.solo.A, registers.HL.solo.L); }
-void CPU::ADD_A_A() { ADD(&registers.AF.solo.A, registers.AF.solo.A); }
-void CPU::ADD_A_U8() { ADD(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
-void CPU::ADD_A_ADDR_HL() { ADD(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
+void CPU::ADD_A_B() { ADD(registers.BC.solo.B); }
+void CPU::ADD_A_C() { ADD(registers.BC.solo.C); }
+void CPU::ADD_A_D() { ADD(registers.DE.solo.D); }
+void CPU::ADD_A_E() { ADD(registers.DE.solo.E); }
+void CPU::ADD_A_H() { ADD(registers.HL.solo.H); }
+void CPU::ADD_A_L() { ADD(registers.HL.solo.L); }
+void CPU::ADD_A_A() { ADD(registers.AF.solo.A); }
+void CPU::ADD_A_U8() { ADD(memory.Read8(registers.PC++)); }
+void CPU::ADD_A_ADDR_HL() { ADD(memory.Read8(registers.HL.pair)); }
 
-void CPU::ADC_A_B() { ADC(&registers.AF.solo.A, registers.BC.solo.B); }
-void CPU::ADC_A_C() { ADC(&registers.AF.solo.A, registers.BC.solo.C); }
-void CPU::ADC_A_D() { ADC(&registers.AF.solo.A, registers.DE.solo.D); }
-void CPU::ADC_A_E() { ADC(&registers.AF.solo.A, registers.DE.solo.E); }
-void CPU::ADC_A_H() { ADC(&registers.AF.solo.A, registers.HL.solo.H); }
-void CPU::ADC_A_L() { ADC(&registers.AF.solo.A, registers.HL.solo.L); }
-void CPU::ADC_A_A() { ADC(&registers.AF.solo.A, registers.AF.solo.A); }
-void CPU::ADC_A_U8() { ADC(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
-void CPU::ADC_A_ADDR_HL() { ADC(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
+void CPU::ADC_A_B() { ADC(registers.BC.solo.B); }
+void CPU::ADC_A_C() { ADC(registers.BC.solo.C); }
+void CPU::ADC_A_D() { ADC(registers.DE.solo.D); }
+void CPU::ADC_A_E() { ADC(registers.DE.solo.E); }
+void CPU::ADC_A_H() { ADC(registers.HL.solo.H); }
+void CPU::ADC_A_L() { ADC(registers.HL.solo.L); }
+void CPU::ADC_A_A() { ADC(registers.AF.solo.A); }
+void CPU::ADC_A_U8() { ADC(memory.Read8(registers.PC++)); }
+void CPU::ADC_A_ADDR_HL() { ADC(memory.Read8(registers.HL.pair)); }
 
 void CPU::ADD_HL_BC() { ADD16(&registers.HL.pair, registers.BC.pair); }
 void CPU::ADD_HL_DE() { ADD16(&registers.HL.pair, registers.DE.pair); }
@@ -165,87 +186,87 @@ void CPU::ADD_HL_HL() { ADD16(&registers.HL.pair, registers.HL.pair); }
 void CPU::ADD_HL_SP() { ADD16(&registers.HL.pair, registers.SP); }
 void CPU::ADD_SP_I8() {
     uint32_t res = registers.SP + (int8_t)memory.Read8(registers.PC);
-    flags.Z ^= flags.Z;
-    flags.N ^= flags.N;
-    flags.C = ((res & 0x100000000) != 0);
-    flags.H = (((registers.SP & 0xfff) + ((int8_t)memory.Read8(registers.PC++) & 0xfff)) & 0x1000) != 0;
+    
+    set_flag(CARRY, ((res & 0x100000000) != 0));
+    set_flag(HALF, (((registers.SP & 0xfff) + ((int8_t)memory.Read8(registers.PC++) & 0xfff)) & 0x1000) != 0);
+    set_flag(NEG, 0);
+    set_flag(ZERO, 0);
 
     registers.SP = (uint16_t)res;
 }
 
-void CPU::SUB_A_B() { SUB(&registers.AF.solo.A, registers.BC.solo.B); }
-void CPU::SUB_A_C() { SUB(&registers.AF.solo.A, registers.BC.solo.C); }
-void CPU::SUB_A_D() { SUB(&registers.AF.solo.A, registers.DE.solo.D); }
-void CPU::SUB_A_E() { SUB(&registers.AF.solo.A, registers.DE.solo.E); }
-void CPU::SUB_A_H() { SUB(&registers.AF.solo.A, registers.HL.solo.H); }
-void CPU::SUB_A_L() { SUB(&registers.AF.solo.A, registers.HL.solo.L); }
-void CPU::SUB_A_A() { SUB(&registers.AF.solo.A, registers.AF.solo.A); }
-void CPU::SUB_A_U8() { SUB(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
-void CPU::SUB_A_ADDR_HL() { SUB(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
+void CPU::SUB_A_B() { SUB(registers.BC.solo.B); }
+void CPU::SUB_A_C() { SUB(registers.BC.solo.C); }
+void CPU::SUB_A_D() { SUB(registers.DE.solo.D); }
+void CPU::SUB_A_E() { SUB(registers.DE.solo.E); }
+void CPU::SUB_A_H() { SUB(registers.HL.solo.H); }
+void CPU::SUB_A_L() { SUB(registers.HL.solo.L); }
+void CPU::SUB_A_A() { SUB(registers.AF.solo.A); }
+void CPU::SUB_A_U8() { SUB(memory.Read8(registers.PC++)); }
+void CPU::SUB_A_ADDR_HL() { SUB(memory.Read8(registers.HL.pair)); }
 
-void CPU::SBC_A_B() { SBC(&registers.AF.solo.A, registers.BC.solo.B); }
-void CPU::SBC_A_C() { SBC(&registers.AF.solo.A, registers.BC.solo.C); }
-void CPU::SBC_A_D() { SBC(&registers.AF.solo.A, registers.DE.solo.D); }
-void CPU::SBC_A_E() { SBC(&registers.AF.solo.A, registers.DE.solo.E); }
-void CPU::SBC_A_H() { SBC(&registers.AF.solo.A, registers.HL.solo.H); }
-void CPU::SBC_A_L() { SBC(&registers.AF.solo.A, registers.HL.solo.L); }
-void CPU::SBC_A_A() { SBC(&registers.AF.solo.A, registers.AF.solo.A); }
-void CPU::SBC_A_U8() { SBC(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
-void CPU::SBC_A_ADDR_HL() { SBC(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
+void CPU::SBC_A_B() { SBC(registers.BC.solo.B); }
+void CPU::SBC_A_C() { SBC(registers.BC.solo.C); }
+void CPU::SBC_A_D() { SBC(registers.DE.solo.D); }
+void CPU::SBC_A_E() { SBC(registers.DE.solo.E); }
+void CPU::SBC_A_H() { SBC(registers.HL.solo.H); }
+void CPU::SBC_A_L() { SBC(registers.HL.solo.L); }
+void CPU::SBC_A_A() { SBC(registers.AF.solo.A); }
+void CPU::SBC_A_U8() { SBC(memory.Read8(registers.PC++)); }
+void CPU::SBC_A_ADDR_HL() { SBC(memory.Read8(registers.HL.pair)); }
 
-void CPU::AND_A_B() { AND(&registers.AF.solo.A, registers.BC.solo.B); }
-void CPU::AND_A_C() { AND(&registers.AF.solo.A, registers.BC.solo.C); }
-void CPU::AND_A_D() { AND(&registers.AF.solo.A, registers.DE.solo.D); }
-void CPU::AND_A_E() { AND(&registers.AF.solo.A, registers.DE.solo.E); }
-void CPU::AND_A_H() { AND(&registers.AF.solo.A, registers.HL.solo.H); }
-void CPU::AND_A_L() { AND(&registers.AF.solo.A, registers.HL.solo.L); }
-void CPU::AND_A_A() { AND(&registers.AF.solo.A, registers.AF.solo.A); }
-void CPU::AND_A_U8() { AND(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
-void CPU::AND_A_ADDR_HL() { AND(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
+void CPU::AND_A_B() { AND(registers.BC.solo.B); }
+void CPU::AND_A_C() { AND(registers.BC.solo.C); }
+void CPU::AND_A_D() { AND(registers.DE.solo.D); }
+void CPU::AND_A_E() { AND(registers.DE.solo.E); }
+void CPU::AND_A_H() { AND(registers.HL.solo.H); }
+void CPU::AND_A_L() { AND(registers.HL.solo.L); }
+void CPU::AND_A_A() { AND(registers.AF.solo.A); }
+void CPU::AND_A_U8() { AND(memory.Read8(registers.PC++)); }
+void CPU::AND_A_ADDR_HL() { AND(memory.Read8(registers.HL.pair)); }
 
-void CPU::XOR_A_B() { XOR(&registers.AF.solo.A, registers.BC.solo.B); }
-void CPU::XOR_A_C() { XOR(&registers.AF.solo.A, registers.BC.solo.C); }
-void CPU::XOR_A_D() { XOR(&registers.AF.solo.A, registers.DE.solo.D); }
-void CPU::XOR_A_E() { XOR(&registers.AF.solo.A, registers.DE.solo.E); }
-void CPU::XOR_A_H() { XOR(&registers.AF.solo.A, registers.HL.solo.H); }
-void CPU::XOR_A_L() { XOR(&registers.AF.solo.A, registers.HL.solo.L); }
-void CPU::XOR_A_A() { XOR(&registers.AF.solo.A, registers.AF.solo.A); }
-void CPU::XOR_A_U8() { XOR(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
-void CPU::XOR_A_ADDR_HL() { XOR(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
+void CPU::XOR_A_B() { XOR(registers.BC.solo.B); }
+void CPU::XOR_A_C() { XOR(registers.BC.solo.C); }
+void CPU::XOR_A_D() { XOR(registers.DE.solo.D); }
+void CPU::XOR_A_E() { XOR(registers.DE.solo.E); }
+void CPU::XOR_A_H() { XOR(registers.HL.solo.H); }
+void CPU::XOR_A_L() { XOR(registers.HL.solo.L); }
+void CPU::XOR_A_A() { XOR(registers.AF.solo.A); }
+void CPU::XOR_A_U8() { XOR(memory.Read8(registers.PC++)); }
+void CPU::XOR_A_ADDR_HL() { XOR(memory.Read8(registers.HL.pair)); }
 
-void CPU::OR_A_B() { OR(&registers.AF.solo.A, registers.BC.solo.B); }
-void CPU::OR_A_C() { OR(&registers.AF.solo.A, registers.BC.solo.C); }
-void CPU::OR_A_D() { OR(&registers.AF.solo.A, registers.DE.solo.D); }
-void CPU::OR_A_E() { OR(&registers.AF.solo.A, registers.DE.solo.E); }
-void CPU::OR_A_H() { OR(&registers.AF.solo.A, registers.HL.solo.H); }
-void CPU::OR_A_L() { OR(&registers.AF.solo.A, registers.HL.solo.L); }
-void CPU::OR_A_A() { OR(&registers.AF.solo.A, registers.AF.solo.A); }
-void CPU::OR_A_U8() { OR(&registers.AF.solo.A, memory.Read8(registers.PC++)); }
-void CPU::OR_A_ADDR_HL() { OR(&registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
+void CPU::OR_A_B() { OR(registers.BC.solo.B); }
+void CPU::OR_A_C() { OR(registers.BC.solo.C); }
+void CPU::OR_A_D() { OR(registers.DE.solo.D); }
+void CPU::OR_A_E() { OR(registers.DE.solo.E); }
+void CPU::OR_A_H() { OR(registers.HL.solo.H); }
+void CPU::OR_A_L() { OR(registers.HL.solo.L); }
+void CPU::OR_A_A() { OR(registers.AF.solo.A); }
+void CPU::OR_A_U8() { OR(memory.Read8(registers.PC++)); }
+void CPU::OR_A_ADDR_HL() { OR(memory.Read8(registers.HL.pair)); }
 
-void CPU::CP_A_B() { CP(registers.AF.solo.A, registers.BC.solo.B); }
-void CPU::CP_A_C() { CP(registers.AF.solo.A, registers.BC.solo.C); }
-void CPU::CP_A_D() { CP(registers.AF.solo.A, registers.DE.solo.D); }
-void CPU::CP_A_E() { CP(registers.AF.solo.A, registers.DE.solo.E); }
-void CPU::CP_A_H() { CP(registers.AF.solo.A, registers.HL.solo.H); }
-void CPU::CP_A_L() { CP(registers.AF.solo.A, registers.HL.solo.L); }
-void CPU::CP_A_A() { CP(registers.AF.solo.A, registers.AF.solo.A); }
-void CPU::CP_A_U8() { CP(registers.AF.solo.A, memory.Read8(registers.PC++)); }
-void CPU::CP_A_ADDR_HL() { CP(registers.AF.solo.A, memory.Read8(registers.HL.pair)); }
-
+void CPU::CP_A_B() { CP(registers.BC.solo.B); }
+void CPU::CP_A_C() { CP(registers.BC.solo.C); }
+void CPU::CP_A_D() { CP(registers.DE.solo.D); }
+void CPU::CP_A_E() { CP(registers.DE.solo.E); }
+void CPU::CP_A_H() { CP(registers.HL.solo.H); }
+void CPU::CP_A_L() { CP(registers.HL.solo.L); }
+void CPU::CP_A_A() { CP(registers.AF.solo.A); }
+void CPU::CP_A_U8() { CP(memory.Read8(registers.PC++)); }
+void CPU::CP_A_ADDR_HL() { CP(memory.Read8(registers.HL.pair)); }
 
 // -- BRANCH --
 void CPU::JR_I8() { JR((int8_t)memory.Read8(registers.PC)); }
-void CPU::JR_C_I8() { if (flags.C) JR((int8_t)memory.Read8(registers.PC)); }
-void CPU::JR_Z_I8() { if (flags.Z) JR((int8_t)memory.Read8(registers.PC)); }
-void CPU::JR_NC_I8() { if (!flags.C) JR((int8_t)memory.Read8(registers.PC)); }
-void CPU::JR_NZ_I8() { if (!flags.Z) JR((int8_t)memory.Read8(registers.PC)); }
+void CPU::JR_C_I8() { if (get_flag(CARRY)) JR((int8_t)memory.Read8(registers.PC)); }
+void CPU::JR_Z_I8() { if (get_flag(ZERO)) JR((int8_t)memory.Read8(registers.PC)); }
+void CPU::JR_NC_I8() { if (!get_flag(CARRY)) JR((int8_t)memory.Read8(registers.PC)); }
+void CPU::JR_NZ_I8() { if (!get_flag(ZERO)) JR((int8_t)memory.Read8(registers.PC)); }
 
 void CPU::JP_U16() { JP(memory.Read16(registers.PC)); }
-void CPU::JP_Z_U16() { if (flags.Z) JP(memory.Read16(registers.PC)); }
-void CPU::JP_C_U16() { if (flags.C) JP(memory.Read16(registers.PC)); }
-void CPU::JP_NZ_U16() { if (!flags.Z) JP(memory.Read16(registers.PC)); }
-void CPU::JP_NC_U16() { if (!flags.C) JP(memory.Read16(registers.PC)); }
+void CPU::JP_Z_U16() { if (get_flag(ZERO)) JP(memory.Read16(registers.PC)); }
+void CPU::JP_C_U16() { if (get_flag(CARRY)) JP(memory.Read16(registers.PC)); }
+void CPU::JP_NZ_U16() { if (!get_flag(ZERO)) JP(memory.Read16(registers.PC)); }
+void CPU::JP_NC_U16() { if (!get_flag(CARRY)) JP(memory.Read16(registers.PC)); }
 void CPU::JP_HL() { JP(registers.HL.pair); }
 
 void CPU::PUSH_BC() { PUSH(registers.BC.pair); }
@@ -259,17 +280,17 @@ void CPU::POP_HL() { POP(&registers.HL.pair); }
 void CPU::POP_AF() { POP(&registers.AF.pair); }
 
 void CPU::CALL_U16() { CALL(memory.Read16(registers.PC)); }
-void CPU::CALL_Z_U16() { if (flags.Z) CALL(memory.Read16(registers.PC)); }
-void CPU::CALL_C_U16() { if (flags.C) CALL(memory.Read16(registers.PC)); }
-void CPU::CALL_NZ_U16() { if (!flags.Z) CALL(memory.Read16(registers.PC)); }
-void CPU::CALL_NC_U16() { if (!flags.C) CALL(memory.Read16(registers.PC)); }
+void CPU::CALL_Z_U16() { if (get_flag(ZERO)) CALL(memory.Read16(registers.PC)); }
+void CPU::CALL_C_U16() { if (get_flag(CARRY)) CALL(memory.Read16(registers.PC)); }
+void CPU::CALL_NZ_U16() { if (!get_flag(ZERO)) CALL(memory.Read16(registers.PC)); }
+void CPU::CALL_NC_U16() { if (!get_flag(CARRY)) CALL(memory.Read16(registers.PC)); }
 
 void CPU::RET() { POP(&registers.PC); }
 void CPU::RETI() { flags.IME = true; RET(); }
-void CPU::RET_Z() { if (flags.Z) RET(); }
-void CPU::RET_C() { if (flags.C) RET(); }
-void CPU::RET_NZ() { if (!flags.Z) RET(); }
-void CPU::RET_NC() { if (!flags.C) RET(); }
+void CPU::RET_Z() { if (get_flag(ZERO)) RET(); }
+void CPU::RET_C() { if (get_flag(CARRY)) RET(); }
+void CPU::RET_NZ() { if (!get_flag(ZERO)) RET(); }
+void CPU::RET_NC() { if (!get_flag(CARRY)) RET(); }
 
 // -- SHIFT & ROTATE --
 void CPU::RLC_B() { RLC(&registers.BC.solo.B); }
@@ -360,38 +381,38 @@ void CPU::SRL_ADDR_HL() {
 }
 
 void CPU::RLCA() {
-    flags.C = ((registers.AF.solo.A & 0x80) >> 7);
+    set_flag(CARRY, ((registers.AF.solo.A & 0x80) >> 7));
     registers.AF.solo.A <<= 1;
-    registers.AF.solo.A |= flags.C;
-    flags.N ^= flags.N;
-    flags.H ^= flags.H;
-    flags.Z ^= flags.Z;
+    registers.AF.solo.A |= get_flag(CARRY);
+    set_flag(NEG, 0);
+    set_flag(HALF, 0);
+    set_flag(ZERO, 0);
 }
 void CPU::RRCA() {
-    flags.C = (registers.AF.solo.A & 0x01);
+    set_flag(CARRY, (registers.AF.solo.A & 0x01));
     registers.AF.solo.A >>= 1;
-    registers.AF.solo.A |= (flags.C << 7);
-    flags.N ^= flags.N;
-    flags.H ^= flags.H;
-    flags.Z ^= flags.Z;
+    registers.AF.solo.A |= (get_flag(CARRY) << 7);
+    set_flag(NEG, 0);
+    set_flag(HALF, 0);
+    set_flag(ZERO, 0);
 }
 void CPU::RLA() {
-    bool tmp = flags.C;
-    flags.C = ((registers.AF.solo.A & 0x80) >> 7);
+    bool tmp = get_flag(CARRY);
+    set_flag(CARRY, ((registers.AF.solo.A & 0x80) >> 7));
     registers.AF.solo.A <<= 1;
     registers.AF.solo.A |= tmp;
-    flags.N ^= flags.N;
-    flags.H ^= flags.H;
-    flags.Z ^= flags.Z;
+    set_flag(NEG, 0);
+    set_flag(HALF, 0);
+    set_flag(ZERO, 0);
 }
 void CPU::RRA() {
-    bool tmp = flags.C;
-    flags.C = (registers.AF.solo.A & 0x10);
+    bool tmp = get_flag(CARRY);
+    set_flag(CARRY, (registers.AF.solo.A & 0x10));
     registers.AF.solo.A >>= 1;
     registers.AF.solo.A |= (tmp << 7);
-    flags.N ^= flags.N;
-    flags.H ^= flags.H;
-    flags.Z ^= flags.Z;
+    set_flag(NEG, 0);
+    set_flag(HALF, 0);
+    set_flag(ZERO, 0);
 }
 
 // -- BIT OPERATIONS --
@@ -667,29 +688,26 @@ void CPU::SET_7_ADDR_HL() {
     memory.Write8(registers.HL.pair, dst);
 }
 
-
 // -- SYSTEM --
 void CPU::STOP() { /* standby */ }
 void CPU::HALT() { /* Wait for interrupt */ }
-void CPU::DAA() { /* decimal adjust A */ }
 void CPU::CPL() {
     registers.AF.solo.A ^= 0xFF;
-    flags.N = 1;
-    flags.H = 1;
+    set_flag(HALF, 1);
+    set_flag(NEG, 1);
 }
 void CPU::SCF() {
-    flags.N ^= flags.N;
-    flags.H ^= flags.H;
-    flags.C = 1;
+    set_flag(CARRY, 1);
+    set_flag(HALF, 0);
+    set_flag(NEG, 0);
 }
 void CPU::CCF() {
-    flags.N ^= flags.N;
-    flags.H ^= flags.H;
-    flags.C = flags.C ^ 1;
+    set_flag(CARRY, get_flag(CARRY) ^ 1);
+    set_flag(HALF, 0);
+    set_flag(NEG, 0);
 }
 void CPU::DI() { flags.IME = 0; }
 void CPU::EI() { flags.IME = 1; }
-
 
 // -- RST --
 void CPU::RST_00H() { RST(0x00); }

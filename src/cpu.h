@@ -12,14 +12,7 @@
 
 #define SPEED_SW 0xFF4D
 
-struct Flags {
-    uint8_t Z : 1;    // Zero
-    uint8_t N : 1;    // Negative
-    uint8_t H : 1;    // Half Carry
-    uint8_t C : 1;    // Carry
-
-    uint8_t IME : 1;    // Interupt Master Enable
-};
+enum Flags { CARRY = 4, HALF = 5, NEG = 6, ZERO = 7 };
 
 struct Registers {
     union B_C {
@@ -56,7 +49,6 @@ struct Registers {
 
 class CPU {
     Registers registers;
-    Flags flags;
     Memory memory;
     Cartridge cartridge;
     //Sound sound;
@@ -79,24 +71,24 @@ public:
 
 private:
     // Generic Functions
-    void LD(uint8_t* dst, const uint8_t src);
-    void LD16(uint16_t* dst, const uint16_t src);
+    void set_flag(Flags flag, bool val);
+    bool get_flag(Flags flag);
 
-    void ADD(uint8_t* dst, const uint8_t val);
+    void ADD(const uint8_t val);
     void ADD16(uint16_t *dst, const uint16_t val);
-    void ADC(uint8_t* dst, const uint8_t val);
-    void SUB(uint8_t* dst, const uint8_t val);
-    void SBC(uint8_t* dst, const uint8_t val);
+    void ADC(const uint8_t val);
+    void SUB(const uint8_t val);
+    void SBC(const uint8_t val);
 
     void INC(uint8_t* dst);
     void DEC(uint8_t* dst);
     void INC16(uint8_t* hreg, uint8_t* lreg);
     void DEC16(uint8_t* hreg, uint8_t* lreg);
 
-    void AND(uint8_t* dst, uint8_t val);
-    void XOR(uint8_t* dst, uint8_t val);
-    void OR(uint8_t* dst, uint8_t val);
-    void CP(uint8_t dst, uint8_t val);
+    void AND(uint8_t val);
+    void XOR(uint8_t val);
+    void OR(uint8_t val);
+    void CP(uint8_t val);
 
     void JR(int8_t val);
     void JP(uint16_t val);
