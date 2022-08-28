@@ -37,7 +37,6 @@ public:
     void Read(const uint16_t loc, uint8_t* buffer, const size_t size);
     uint8_t Read8(const uint16_t loc);
     uint16_t Read16(const uint16_t loc);
-    uint8_t* GetHostAddress(const uint16_t loc); // Allows the use of pointers and adds control over the address space of memory
 
     // Checks
     bool VerifyLogo();

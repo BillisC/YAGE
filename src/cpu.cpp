@@ -17,8 +17,7 @@ void CPU::Init() {
     // Initialize memory
     memory.Init();
 
-    SPEED_SW = 1;
-
+    memory.Write8(SPEED_SW, 0x1);
 }
 
 int CPU::LoadCatridge(const std::string file_name) {
@@ -69,11 +68,10 @@ void CPU::MemoryDump() {
 }
 
 void CPU::Fetch() {
-    bool chk = memory.Read8(registers.PC) == 0xCB;
+    bool chk = (memory.Read8(registers.PC) == 0xCB);
     registers.PC += chk;
 
-    uint16_t opcode = memory.Read16(registers.PC);
-    registers.PC += 2;
+    uint8_t opcode = memory.Read8(registers.PC++);
 
     if (!chk) ((*this).*(InstructionTable[opcode].ipr))();
     else ((*this).*(CB_InstructionTable[opcode].ipr))();

@@ -10,7 +10,7 @@
 #include "memory.h"
 #include "cartridge.h"
 
-#define SPEED_SW *(memory.GetHostAddress(0xFF4D))
+#define SPEED_SW 0xFF4D
 
 struct Flags {
     uint8_t Z : 1;    // Zero
@@ -79,30 +79,31 @@ public:
 
 private:
     // Generic Functions
-    void LD(uint8_t* dst, uint8_t src);
-    void LD16(uint16_t* dst, uint16_t src);
+    void LD(uint8_t* dst, const uint8_t src);
+    void LD16(uint16_t* dst, const uint16_t src);
 
-    void ADD(uint8_t* dst, uint8_t num);
-    void ADD16(uint16_t *dst, uint16_t num);
-    void ADC(uint8_t* dst, uint8_t num);
-    void SUB(uint8_t* dst, uint8_t num);
-    void SBC(uint8_t* dst, uint8_t num);
+    void ADD(uint8_t* dst, const uint8_t val);
+    void ADD16(uint16_t *dst, const uint16_t val);
+    void ADC(uint8_t* dst, const uint8_t val);
+    void SUB(uint8_t* dst, const uint8_t val);
+    void SBC(uint8_t* dst, const uint8_t val);
 
     void INC(uint8_t* dst);
     void DEC(uint8_t* dst);
     void INC16(uint8_t* hreg, uint8_t* lreg);
     void DEC16(uint8_t* hreg, uint8_t* lreg);
 
-    void AND(uint8_t* dst, uint8_t* num);
-    void XOR(uint8_t* dst, uint8_t* num);
-    void OR(uint8_t* dst, uint8_t* num);
-    void CP(uint8_t* dst, uint8_t* num);
+    void AND(uint8_t* dst, uint8_t val);
+    void XOR(uint8_t* dst, uint8_t val);
+    void OR(uint8_t* dst, uint8_t val);
+    void CP(uint8_t dst, uint8_t val);
 
-    void JR(int8_t imm);
-    void JP(uint16_t imm);
-    void PUSH(uint8_t* regH, uint8_t* regL);
-    void POP(uint8_t* regH, uint8_t* regL);
+    void JR(int8_t val);
+    void JP(uint16_t val);
+    void PUSH(uint16_t reg);
+    void POP(uint16_t* reg);
     void CALL(uint16_t loc);
+    void RST(uint8_t loc);
 
     void RLC(uint8_t* dst);
     void RRC(uint8_t* dst);
@@ -113,7 +114,7 @@ private:
     void SRL(uint8_t* dst);
 
     void SWAP(uint8_t* dst);
-    void BIT(uint8_t bit, uint8_t* dst);
+    void BIT(uint8_t bit, uint8_t dst);
     void RES(uint8_t bit, uint8_t* dst);
     void SET(uint8_t bit, uint8_t* dst);
 

@@ -10,50 +10,50 @@ void CPU::LD16(uint16_t* dst, uint16_t src) {
 }
 
 // -- ALU --
-void CPU::ADD(uint8_t* dst, uint8_t num) {
-    uint16_t res = *dst + num;
+void CPU::ADD(uint8_t* dst, uint8_t val) {
+    uint16_t res = *dst + val;
 
     flags.Z = (res == 0);
     flags.N ^= flags.N;
     flags.C = (res & 0x100) != 0;
-    flags.H = (((*dst & 0xf) + (num & 0xf)) & 0x10) != 0;
+    flags.H = (((*dst & 0xf) + (val & 0xf)) & 0x10) != 0;
 
     *dst = (uint8_t)res;
 }
-void CPU::ADD16(uint16_t *dst, uint16_t num) {
-    uint32_t res = *dst + num;
+void CPU::ADD16(uint16_t *dst, uint16_t val) {
+    uint32_t res = *dst + val;
 
     flags.N ^= flags.N;
     flags.C = (res & 0x100000000) != 0;
-    flags.H = (((*dst & 0xfff) + (num & 0xfff)) & 0x1000) != 0;
+    flags.H = (((*dst & 0xfff) + (val & 0xfff)) & 0x1000) != 0;
 
     *dst = (uint16_t)res;
 }
-void CPU::ADC(uint8_t* dst, uint8_t num) {
-    uint16_t res = *dst + num;
+void CPU::ADC(uint8_t* dst, uint8_t val) {
+    uint16_t res = *dst + val;
 
     flags.Z = (res == 0);
     flags.N ^= flags.N;
     flags.C = (res & 0x100) != 0;
-    flags.H = (((*dst & 0xf) + (num & 0xf) + (flags.C & 0xf)) & 0x10) != 0;
+    flags.H = (((*dst & 0xf) + (val & 0xf) + (flags.C & 0xf)) & 0x10) != 0;
 
     *dst = (uint8_t)res;
 }
-void CPU::SUB(uint8_t* dst, uint8_t num) {
-    uint16_t res = *dst - num;
+void CPU::SUB(uint8_t* dst, uint8_t val) {
+    uint16_t res = *dst - val;
     flags.Z = (res == 0);
     flags.N = 1;
     flags.C = (res & 0x100) != 0;
-    flags.H = (((*dst & 0xf) - (num & 0xf)) & 0x10) != 0;
+    flags.H = (((*dst & 0xf) - (val & 0xf)) & 0x10) != 0;
 
     *dst = (uint8_t)res;
 }
-void CPU::SBC(uint8_t* dst, uint8_t num) {
-    uint16_t res = *dst - num;
+void CPU::SBC(uint8_t* dst, uint8_t val) {
+    uint16_t res = *dst - val;
     flags.Z = (res == 0);
     flags.N = 1;
     flags.C = (res & 0x100) != 0;
-    flags.H = (((*dst & 0xf) - (num & 0xf) - (flags.C & 0xf)) & 0x10) != 0;
+    flags.H = (((*dst & 0xf) - (val & 0xf) - (flags.C & 0xf)) & 0x10) != 0;
 
     *dst = (uint8_t)res;
 }
@@ -76,56 +76,58 @@ void CPU::DEC(uint8_t* dst) {
     (*dst)--;
 }
 
-void CPU::AND(uint8_t* dst, uint8_t* num) {
-    *dst &= *num;
+void CPU::AND(uint8_t* dst, uint8_t val) {
+    *dst &= val;
     flags.Z = (dst == 0);
     flags.N ^= flags.N;
     flags.H = 1;
     flags.C ^= flags.C;
 }
-void CPU::XOR(uint8_t* dst, uint8_t* num) {
-    *dst ^= *num;
+void CPU::XOR(uint8_t* dst, uint8_t val) {
+    *dst ^= val;
     flags.Z = (dst == 0);
     flags.N ^= flags.N;
     flags.H ^= flags.H;
     flags.C ^= flags.C;
 }
-void CPU::OR(uint8_t* dst, uint8_t* num) {
-    *dst |= *num;
+void CPU::OR(uint8_t* dst, uint8_t val) {
+    *dst |= val;
     flags.Z = (dst == 0);
     flags.N ^= flags.N;
     flags.H ^= flags.H;
     flags.C ^= flags.C;
 }
-void CPU::CP(uint8_t* dst, uint8_t* num) {
-    flags.Z = (*dst == 0);
+void CPU::CP(uint8_t dst, uint8_t val) {
+    flags.Z = (dst == 0);
     flags.N = 1;
-    flags.H = (((*dst & 0xf) - (*num & 0xf)) & 0x10);
-    flags.C = (((*dst - *num) & 0x100) != 0);
+    flags.H = (((dst & 0xf) - (val & 0xf)) & 0x10);
+    flags.C = (((dst - val) & 0x100) != 0);
 }
 
 
 // -- BRANCH --
-void CPU::JR(int8_t imm) {
-    registers.PC += imm;
+void CPU::JR(int8_t val) {
+    registers.PC += val;
 }
-void CPU::JP(uint16_t imm) {
-    registers.PC = imm;
+void CPU::JP(uint16_t val) {
+    registers.PC = val;
 }
-void CPU::PUSH(uint8_t* regH, uint8_t* regL) {
-    memory.Write8(--registers.SP, *regH);
-    memory.Write8(--registers.SP, *regL);
+void CPU::PUSH(uint16_t reg) {
+    memory.Write8(registers.SP--, (uint8_t)(reg >> 8));
+    memory.Write8(registers.SP--, (uint8_t)reg);
 }
-void CPU::POP(uint8_t* regH, uint8_t* regL) {
-    *regL = *memory.GetHostAddress(registers.SP++);
-    *regH = *memory.GetHostAddress(registers.SP++);
+void CPU::POP(uint16_t* reg) {
+    *reg = memory.Read8(++registers.SP) | (memory.Read8(++registers.SP) << 8);
 }
 void CPU::CALL(uint16_t loc) {
-    memory.Write8(--registers.SP, (uint8_t)(registers.PC >> 8));
-    memory.Write8(--registers.SP, (uint8_t)registers.PC);
+    registers.PC += 2;
+    PUSH(registers.PC);
     registers.PC = loc;
 }
-
+void CPU::RST(uint8_t loc) {
+    PUSH(registers.PC);
+    registers.PC = loc;
+}
 
 // -- SHIFT & ROTATE --
 void CPU::RLC(uint8_t* dst) {
@@ -163,14 +165,14 @@ void CPU::RR(uint8_t* dst) {
 }
 
 void CPU::SLA(uint8_t* dst) {
-    flags.C = ((registers.A & 0x80) >> 7);
-    registers.A <<= 1;
+    flags.C = ((*dst & 0x80) >> 7);
+    *dst <<= 1;
     flags.N ^= flags.N;
     flags.H ^= flags.H;
-    flags.Z = (registers.A == 0);
+    flags.Z = (*dst == 0);
 }
 void CPU::SRA(uint8_t* dst) {
-    uint8_t tmp = (registers.A & 0x80);
+    uint8_t tmp = (*dst & 0x80);
     flags.C = (*dst & 0x01);
     *dst >>= 1;
     *dst |= tmp;
@@ -196,8 +198,8 @@ void CPU::SWAP(uint8_t* dst) {
     flags.H ^= flags.H;
     flags.C ^= flags.C;
 }
-void CPU::BIT(uint8_t bit, uint8_t* dst) {
-    flags.Z = (((*dst & (0x01 << bit)) >> bit) == 0);
+void CPU::BIT(uint8_t bit, uint8_t dst) {
+    flags.Z = (((dst & (0x01 << bit)) >> bit) == 0);
     flags.N ^= flags.N;
     flags.H = 1;
 }
