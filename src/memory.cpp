@@ -1,24 +1,15 @@
 #include "memory.h"
-#include "stdio.h"
 
 // Constructor
-void Memory::Init() {
-    Clear();
-}
-
-void Memory::Clear() {
+void Memory::Reset() {
     memset(memory, 0, 0xFFFF);
 }
 
 // Write Operations
-void Memory::Write(const uint16_t loc, uint8_t* buffer, const size_t size) {
-    memcpy(memory + loc, buffer, size);
-}
-
 void Memory::Write8(const uint16_t loc, const uint8_t byte) {
     if (!(loc >= 0xE000 && loc <= 0xFE00)) {
-        *memory[loc] = byte;
-        if (loc >= 0xC000 && loc <= 0xDE00) *memory[loc + 0x2000] = byte;
+        **(memory + loc) = byte;
+        if (loc >= 0xC000 && loc <= 0xDE00) **(memory + loc + 0x2000) = byte;
     }
     else {
         /* memory[loc - 0x2000] = byte; */  // Nintendo prohibited
@@ -28,15 +19,15 @@ void Memory::Write8(const uint16_t loc, const uint8_t byte) {
 
 // Read Operations
 void Memory::Read(const uint16_t loc, uint8_t* buffer, const size_t size) {
-    memcpy(buffer, memory + loc, size);
+    memcpy(buffer, *(memory + loc), size);
 }
 
 uint8_t Memory::Read8(const uint16_t loc) {
-    return *memory[loc];
+    return **(memory + loc);
 }
 
 uint16_t Memory::Read16(const uint16_t loc) {
-    return (*memory[loc + 1] << 8) | *memory[loc];
+    return (**(memory + loc + 1) << 8) | **(memory + loc);
 }
 
 // Checks
@@ -47,6 +38,6 @@ bool Memory::VerifyLogo() {
         0xBB, 0xBB, 0x67, 0x63, 0x6E, 0x0E, 0xEC, 0xCC, 0xDD, 0xDC, 0x99, 0x9F, 0xBB, 0xB9, 0x33, 0x3E
     };
 
-    if (memcmp(logo, &memory[0x104], 0x18) != 0) return false;
+    if (memcmp(logo, *(memory + 0x104), 0x18) != 0) return false;
     return true;
 }

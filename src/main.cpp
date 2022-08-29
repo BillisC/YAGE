@@ -6,7 +6,7 @@ int main() {
     bool active = false;
 
     // Setup Environment
-    CPU* gb_system = new CPU();
+    Bus* gb_system = new Bus();
 
     if (gb_system->LoadCatridge("roms/cpu_instrs.gb") != 0) {
         printf("Initialization Failure!\n");

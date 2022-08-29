@@ -1,15 +1,17 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include <stdint.h>
+// Libraries
 #include <string.h>
 
-/*  --------------------------- 
+#include "bus.h"
+
+/*  ---------------------------
      Interrupt Enable Register      | 0xFFFF
      Internal CPU RAM               | 0xFF80 - 0xFFFE
      I/O Registers                  | 0xFF00 - 0xFF7F
      Empty but unusable for I/O     | 0xFEA0 - 0xFEFF
-     Sprite Attrib Memory (OAM)     | 0xFE00 - 0xFE9F
+     Sprite Attrib bus->memory (OAM)| 0xFE00 - 0xFE9F
      Echo of Work RAM               | 0xE000 - 0xFDFF
      4kB Work RAM, switchable (1-7) | 0xD000 - 0xDFFF
      4kB Work RAM                   | 0xC000 - 0xCFFF
@@ -22,15 +24,15 @@
 class Memory {
 private:
     uint8_t* memory[0xFFFF + 1];
+    Bus* bus;
 
 public:
-    Memory() {};
+    Memory(Bus* mbus): bus(mbus) { Reset(); }
+    ~Memory() { Reset(); }
 
-    void Init();
-    void Clear();
+    void Reset();
 
     // Write operations
-    void Write(const uint16_t loc, uint8_t* buffer, const size_t size);
     void Write8(const uint16_t loc, const uint8_t byte);
 
     // Read operations

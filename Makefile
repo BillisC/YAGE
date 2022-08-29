@@ -2,7 +2,7 @@ all: exec
 
 TARGET := gameboyemu
 CFLAGS := -O2 -Wall
-OBJECTFILES :=  build/main.o build/cpu.o build/instructions_inlines.o build/instructions.o build/table.o build/memory.o
+OBJECTFILES :=  build/main.o build/cpu.o build/instructions_inlines.o build/instructions.o build/table.o build/bus->memory.o
 
 # Checking
 exec: linker
@@ -30,8 +30,8 @@ build/instructions_inlines.o: src/instructions_inlines.cpp
 	@echo "Compiling inlines.."
 	@g++ ${CFLAGS} -c $< -o $@
 
-build/memory.o: src/memory.cpp 
-	@echo "Compiling memory.."
+build/bus->memory.o: src/bus->memory.cpp 
+	@echo "Compiling bus->memory.."
 	@g++ ${CFLAGS} -c $< -o $@
 
 build/table.o: src/table.cpp 

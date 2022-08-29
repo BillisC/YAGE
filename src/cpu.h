@@ -2,18 +2,11 @@
 #define CPU_H
 
 // Libraries
-#include <fstream>
 #include <vector>
-#include <stdint.h>
 
-// Components
-#include "memory.h"
-#include "cartridge.h"
-
-#define SPEED_SW 0xFF4D
+#include "bus.h"
 
 enum Flags { CARRY = 4, HALF = 5, NEG = 6, ZERO = 7 };
-
 struct Registers {
     union B_C {
         struct registers {
@@ -49,25 +42,19 @@ struct Registers {
 
 class CPU {
     Registers registers;
-    Memory memory;
-    Cartridge cartridge;
-    //Sound sound;
-    //Video video;
     //Timers timer;
-    //Interrupts intr;
     //S_Modes mode;
+    Bus* bus;
 
 public:
-    CPU();
+    CPU(Bus* mbus): bus(mbus) { Preload(); Reset(); }
+    ~CPU() { Reset(); }
 
     void Preload();
-    void Init();
+    void Reset();
     void Fetch();
 
     int LoadCatridge(const std::string file_name);
-
-    // Debug
-    void MemoryDump();
 
 private:
     // Generic Functions
@@ -75,7 +62,7 @@ private:
     bool get_flag(Flags flag);
 
     void ADD(const uint8_t val);
-    void ADD16(uint16_t *dst, const uint16_t val);
+    void ADD16(uint16_t* dst, const uint16_t val);
     void ADC(const uint8_t val);
     void SUB(const uint8_t val);
     void SBC(const uint8_t val);
