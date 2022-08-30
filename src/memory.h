@@ -3,8 +3,7 @@
 
 // Libraries
 #include <string.h>
-
-#include "bus.h"
+#include <stdint.h>
 
 /*  ---------------------------
      Interrupt Enable Register      | 0xFFFF
@@ -24,10 +23,10 @@
 class Memory {
 private:
     uint8_t* memory[0xFFFF + 1];
-    Bus* bus;
+    Gameboy* bus;
 
 public:
-    Memory(Bus* mbus): bus(mbus) { Reset(); }
+    Memory(Gameboy* mbus): bus(mbus) { Reset(); }
     ~Memory() { Reset(); }
 
     void Reset();
@@ -39,6 +38,9 @@ public:
     void Read(const uint16_t loc, uint8_t* buffer, const size_t size);
     uint8_t Read8(const uint16_t loc);
     uint16_t Read16(const uint16_t loc);
+
+    // Mapper
+    void Mapper(const uint16_t loc,  uint8_t *array, const size_t size);
 
     // Checks
     bool VerifyLogo();

@@ -3,8 +3,7 @@
 
 // Libraries
 #include <vector>
-
-#include "bus.h"
+#include <stdint.h>
 
 enum Flags { CARRY = 4, HALF = 5, NEG = 6, ZERO = 7 };
 struct Registers {
@@ -44,17 +43,15 @@ class CPU {
     Registers registers;
     //Timers timer;
     //S_Modes mode;
-    Bus* bus;
+    Gameboy* bus;
 
 public:
-    CPU(Bus* mbus): bus(mbus) { Preload(); Reset(); }
+    CPU(Gameboy* mbus) : bus(mbus) { Preload(); Reset(); }
     ~CPU() { Reset(); }
 
     void Preload();
     void Reset();
     void Fetch();
-
-    int LoadCatridge(const std::string file_name);
 
 private:
     // Generic Functions
