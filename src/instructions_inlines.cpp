@@ -1,4 +1,4 @@
-#include "cpu.h"
+#include "gameboy.h"
 
 // MISC
 void CPU::set_flag(Flags flag, bool val) {
@@ -120,11 +120,12 @@ void CPU::JP(uint16_t val) {
     registers.PC = val;
 }
 void CPU::PUSH(uint16_t reg) {
-    bus->memory.Write8(registers.SP--, (uint8_t)(reg >> 8));
-    bus->memory.Write8(registers.SP--, (uint8_t)reg);
+    gb->memory.Write8(registers.SP--, (uint8_t)(reg >> 8));
+    gb->memory.Write8(registers.SP--, (uint8_t)reg);
 }
 void CPU::POP(uint16_t* reg) {
-    *reg = bus->memory.Read8(++registers.SP) | (bus->memory.Read8(++registers.SP) << 8);
+    *reg = gb->memory.Read8(++registers.SP);
+    *reg |= (gb->memory.Read8(++registers.SP) << 8);
 }
 void CPU::CALL(uint16_t loc) {
     registers.PC += 2;

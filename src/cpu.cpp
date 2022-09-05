@@ -1,6 +1,8 @@
-#include "cpu.h"
+#include "gameboy.h"
 
 void CPU::Reset() {
+    gb->debug.Log("Resetting CPU");
+
     // Initial register values
     registers.AF.solo.A = 0x01; registers.AF.solo.F = 0xB0;
     registers.BC.solo.B = 0x00; registers.BC.solo.C = 0x13;
@@ -11,11 +13,17 @@ void CPU::Reset() {
 }
 
 void CPU::Fetch() {
-    bool chk = (bus->memory.Read8(registers.PC) == 0xCB);
+    bool chk = (gb->memory.Read8(registers.PC) == 0xCB);
     registers.PC += chk;
 
-    uint8_t opcode = bus->memory.Read8(registers.PC++);
+    uint8_t opcode = gb->memory.Read8(registers.PC++);
 
-    if (!chk) ((*this).*(InstructionTable[opcode].ipr))();
-    else ((*this).*(CB_InstructionTable[opcode].ipr))();
+    if (!chk) {
+        gb->debug.Log("Code: " + std::to_string(opcode) + " | Name: " + std::string(InstructionTable[opcode].name));
+        ((*this).*(InstructionTable[opcode].ipr))();
+    }
+    else {
+        gb->debug.Log("Code: CB " + std::to_string(opcode) + " | Name: " + std::string(InstructionTable[opcode].name));
+        ((*this).*(CB_InstructionTable[opcode].ipr))();
+    }
 }

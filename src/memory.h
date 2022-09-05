@@ -10,7 +10,7 @@
      Internal CPU RAM               | 0xFF80 - 0xFFFE
      I/O Registers                  | 0xFF00 - 0xFF7F
      Empty but unusable for I/O     | 0xFEA0 - 0xFEFF
-     Sprite Attrib bus->memory (OAM)| 0xFE00 - 0xFE9F
+     Sprite Attrib Memory (OAM)     | 0xFE00 - 0xFE9F
      Echo of Work RAM               | 0xE000 - 0xFDFF
      4kB Work RAM, switchable (1-7) | 0xD000 - 0xDFFF
      4kB Work RAM                   | 0xC000 - 0xCFFF
@@ -23,10 +23,10 @@
 class Memory {
 private:
     uint8_t* memory[0xFFFF + 1];
-    Gameboy* bus;
+    Gameboy* gb;
 
 public:
-    Memory(Gameboy* mbus): bus(mbus) { Reset(); }
+    Memory(Gameboy* mbus): gb(mbus) { Reset(); }
     ~Memory() { Reset(); }
 
     void Reset();
@@ -41,6 +41,7 @@ public:
 
     // Mapper
     void Mapper(const uint16_t loc,  uint8_t *array, const size_t size);
+    void Prepare();
 
     // Checks
     bool VerifyLogo();

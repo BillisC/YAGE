@@ -5,6 +5,8 @@
 #include <vector>
 #include <stdint.h>
 
+class Gameboy;
+
 enum Flags { CARRY = 4, HALF = 5, NEG = 6, ZERO = 7 };
 struct Registers {
     union B_C {
@@ -41,12 +43,10 @@ struct Registers {
 
 class CPU {
     Registers registers;
-    //Timers timer;
-    //S_Modes mode;
-    Gameboy* bus;
+    Gameboy* gb;
 
 public:
-    CPU(Gameboy* mbus) : bus(mbus) { Preload(); Reset(); }
+    CPU(Gameboy* mbus) : gb(mbus) { Preload(); Reset(); }
     ~CPU() { Reset(); }
 
     void Preload();

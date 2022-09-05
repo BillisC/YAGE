@@ -1,30 +1,30 @@
-#include "cpu.h"
+#include "gameboy.h"
 
 // nop
 void CPU::NOP() {}
 
 // -- LOAD --
-void CPU::LD_B_U8() { registers.BC.solo.B = bus->memory.Read8(registers.PC++); }
-void CPU::LD_C_U8() { registers.BC.solo.C = bus->memory.Read8(registers.PC++); }
-void CPU::LD_D_U8() { registers.DE.solo.D = bus->memory.Read8(registers.PC++); }
-void CPU::LD_E_U8() { registers.DE.solo.E = bus->memory.Read8(registers.PC++); }
-void CPU::LD_H_U8() { registers.HL.solo.H = bus->memory.Read8(registers.PC++); }
-void CPU::LD_L_U8() { registers.HL.solo.L = bus->memory.Read8(registers.PC++); }
-void CPU::LD_A_U8() { registers.AF.solo.A = bus->memory.Read8(registers.PC++); }
+void CPU::LD_B_U8() { registers.BC.solo.B = gb->memory.Read8(registers.PC++); }
+void CPU::LD_C_U8() { registers.BC.solo.C = gb->memory.Read8(registers.PC++); }
+void CPU::LD_D_U8() { registers.DE.solo.D = gb->memory.Read8(registers.PC++); }
+void CPU::LD_E_U8() { registers.DE.solo.E = gb->memory.Read8(registers.PC++); }
+void CPU::LD_H_U8() { registers.HL.solo.H = gb->memory.Read8(registers.PC++); }
+void CPU::LD_L_U8() { registers.HL.solo.L = gb->memory.Read8(registers.PC++); }
+void CPU::LD_A_U8() { registers.AF.solo.A = gb->memory.Read8(registers.PC++); }
 
-void CPU::LD_SP_U16() { registers.SP = bus->memory.Read16(registers.PC); }
+void CPU::LD_SP_U16() { registers.SP = gb->memory.Read16(registers.PC); }
 void CPU::LD_SP_HL() { registers.SP = registers.HL.pair; }
 
-void CPU::LD_A_ADDR_BC() { registers.AF.solo.A = bus->memory.Read8(registers.BC.pair); }
-void CPU::LD_A_ADDR_DE() { registers.AF.solo.A = bus->memory.Read8(registers.DE.pair); }
-void CPU::LD_A_ADDR_HLp() { registers.AF.solo.A = bus->memory.Read8(registers.HL.pair++); }
-void CPU::LD_A_ADDR_HLm() { registers.AF.solo.A = bus->memory.Read8(registers.HL.pair--); }
-void CPU::LD_A_ADDR_U16() { registers.AF.solo.A = bus->memory.Read8(bus->memory.Read16(registers.PC)); registers.PC += 2; }
+void CPU::LD_A_ADDR_BC() { registers.AF.solo.A = gb->memory.Read8(registers.BC.pair); }
+void CPU::LD_A_ADDR_DE() { registers.AF.solo.A = gb->memory.Read8(registers.DE.pair); }
+void CPU::LD_A_ADDR_HLp() { registers.AF.solo.A = gb->memory.Read8(registers.HL.pair++); }
+void CPU::LD_A_ADDR_HLm() { registers.AF.solo.A = gb->memory.Read8(registers.HL.pair--); }
+void CPU::LD_A_ADDR_U16() { registers.AF.solo.A = gb->memory.Read8(gb->memory.Read16(registers.PC)); registers.PC += 2; }
 
-void CPU::LD_BC_U16() { registers.BC.pair = bus->memory.Read16(registers.PC); registers.PC += 2; }
-void CPU::LD_DE_U16() { registers.DE.pair = bus->memory.Read16(registers.PC); registers.PC += 2; }
-void CPU::LD_HL_U16() { registers.HL.pair = bus->memory.Read16(registers.PC); registers.PC += 2; }
-void CPU::LD_HL_SPpI8() { registers.HL.pair = registers.SP + (int8_t)bus->memory.Read8(registers.PC++); }
+void CPU::LD_BC_U16() { registers.BC.pair = gb->memory.Read16(registers.PC); registers.PC += 2; }
+void CPU::LD_DE_U16() { registers.DE.pair = gb->memory.Read16(registers.PC); registers.PC += 2; }
+void CPU::LD_HL_U16() { registers.HL.pair = gb->memory.Read16(registers.PC); registers.PC += 2; }
+void CPU::LD_HL_SPpI8() { registers.HL.pair = registers.SP + (int8_t)gb->memory.Read8(registers.PC++); }
 
 void CPU::LD_B_B() { registers.BC.solo.B = registers.BC.solo.B; }
 void CPU::LD_B_C() { registers.BC.solo.B = registers.BC.solo.C; }
@@ -74,28 +74,28 @@ void CPU::LD_L_H() { registers.HL.solo.L = registers.HL.solo.H; }
 void CPU::LD_L_L() { registers.HL.solo.L = registers.HL.solo.L; }
 void CPU::LD_L_A() { registers.HL.solo.L = registers.AF.solo.A; }
 
-void CPU::LD_B_ADDR_HL() { registers.BC.solo.B = bus->memory.Read8(registers.HL.pair); }
-void CPU::LD_C_ADDR_HL() { registers.BC.solo.C = bus->memory.Read8(registers.HL.pair); }
-void CPU::LD_D_ADDR_HL() { registers.DE.solo.D = bus->memory.Read8(registers.HL.pair); }
-void CPU::LD_E_ADDR_HL() { registers.DE.solo.E = bus->memory.Read8(registers.HL.pair); }
-void CPU::LD_H_ADDR_HL() { registers.HL.solo.H = bus->memory.Read8(registers.HL.pair); }
-void CPU::LD_L_ADDR_HL() { registers.HL.solo.L = bus->memory.Read8(registers.HL.pair); }
-void CPU::LD_A_ADDR_HL() { registers.AF.solo.A = bus->memory.Read8(registers.HL.pair); }
+void CPU::LD_B_ADDR_HL() { registers.BC.solo.B = gb->memory.Read8(registers.HL.pair); }
+void CPU::LD_C_ADDR_HL() { registers.BC.solo.C = gb->memory.Read8(registers.HL.pair); }
+void CPU::LD_D_ADDR_HL() { registers.DE.solo.D = gb->memory.Read8(registers.HL.pair); }
+void CPU::LD_E_ADDR_HL() { registers.DE.solo.E = gb->memory.Read8(registers.HL.pair); }
+void CPU::LD_H_ADDR_HL() { registers.HL.solo.H = gb->memory.Read8(registers.HL.pair); }
+void CPU::LD_L_ADDR_HL() { registers.HL.solo.L = gb->memory.Read8(registers.HL.pair); }
+void CPU::LD_A_ADDR_HL() { registers.AF.solo.A = gb->memory.Read8(registers.HL.pair); }
 
-void CPU::LD_ADDR_HL_B() { bus->memory.Write8(registers.HL.pair, registers.BC.solo.B); }
-void CPU::LD_ADDR_HL_C() { bus->memory.Write8(registers.HL.pair, registers.BC.solo.C); }
-void CPU::LD_ADDR_HL_D() { bus->memory.Write8(registers.HL.pair, registers.DE.solo.D); }
-void CPU::LD_ADDR_HL_E() { bus->memory.Write8(registers.HL.pair, registers.DE.solo.E); }
-void CPU::LD_ADDR_HL_H() { bus->memory.Write8(registers.HL.pair, registers.HL.solo.H); }
-void CPU::LD_ADDR_HL_L() { bus->memory.Write8(registers.HL.pair, registers.HL.solo.L); }
-void CPU::LD_ADDR_HL_A() { bus->memory.Write8(registers.HL.pair, registers.AF.solo.A); }
-void CPU::LD_ADDR_BC_A() { bus->memory.Write8(registers.BC.pair, registers.AF.solo.A); }
-void CPU::LD_ADDR_DE_A() { bus->memory.Write8(registers.DE.pair, registers.AF.solo.A); }
-void CPU::LD_ADDR_HLp_A() { bus->memory.Write8(registers.HL.pair++, registers.AF.solo.A); }
-void CPU::LD_ADDR_HLm_A() { bus->memory.Write8(registers.HL.pair--, registers.AF.solo.A); }
-void CPU::LD_ADDR_U16_A() { bus->memory.Write8(bus->memory.Read16(registers.PC), registers.AF.solo.A); registers.PC += 2; }
-void CPU::LD_ADDR_U16_SP() { bus->memory.Write8(bus->memory.Read16(registers.PC), registers.SP); registers.PC += 2; }
-void CPU::LD_ADDR_HL_U8() { bus->memory.Write8(registers.HL.pair, bus->memory.Read8(registers.PC++)); }
+void CPU::LD_ADDR_HL_B() { gb->memory.Write8(registers.HL.pair, registers.BC.solo.B); }
+void CPU::LD_ADDR_HL_C() { gb->memory.Write8(registers.HL.pair, registers.BC.solo.C); }
+void CPU::LD_ADDR_HL_D() { gb->memory.Write8(registers.HL.pair, registers.DE.solo.D); }
+void CPU::LD_ADDR_HL_E() { gb->memory.Write8(registers.HL.pair, registers.DE.solo.E); }
+void CPU::LD_ADDR_HL_H() { gb->memory.Write8(registers.HL.pair, registers.HL.solo.H); }
+void CPU::LD_ADDR_HL_L() { gb->memory.Write8(registers.HL.pair, registers.HL.solo.L); }
+void CPU::LD_ADDR_HL_A() { gb->memory.Write8(registers.HL.pair, registers.AF.solo.A); }
+void CPU::LD_ADDR_BC_A() { gb->memory.Write8(registers.BC.pair, registers.AF.solo.A); }
+void CPU::LD_ADDR_DE_A() { gb->memory.Write8(registers.DE.pair, registers.AF.solo.A); }
+void CPU::LD_ADDR_HLp_A() { gb->memory.Write8(registers.HL.pair++, registers.AF.solo.A); }
+void CPU::LD_ADDR_HLm_A() { gb->memory.Write8(registers.HL.pair--, registers.AF.solo.A); }
+void CPU::LD_ADDR_U16_A() { gb->memory.Write8(gb->memory.Read16(registers.PC), registers.AF.solo.A); registers.PC += 2; }
+void CPU::LD_ADDR_U16_SP() { gb->memory.Write8(gb->memory.Read16(registers.PC), registers.SP); registers.PC += 2; }
+void CPU::LD_ADDR_HL_U8() { gb->memory.Write8(registers.HL.pair, gb->memory.Read8(registers.PC++)); }
 
 void CPU::LD_A_B() { registers.AF.solo.A = registers.BC.solo.B; }
 void CPU::LD_A_C() { registers.AF.solo.A = registers.BC.solo.C; }
@@ -105,10 +105,10 @@ void CPU::LD_A_H() { registers.AF.solo.A = registers.HL.solo.H; }
 void CPU::LD_A_L() { registers.AF.solo.A = registers.HL.solo.L; }
 void CPU::LD_A_A() { registers.AF.solo.A = registers.AF.solo.A; }
 
-void CPU::LD_OFF_U8_A() { bus->memory.Write8(0xFF00 + bus->memory.Read8(registers.PC++), registers.AF.solo.A); }
-void CPU::LD_A_OFF_U8() { registers.AF.solo.A = bus->memory.Read8(0xFF00 + bus->memory.Read8(registers.PC++)); }
-void CPU::LD_A_OFF_C() { registers.AF.solo.A = bus->memory.Read8(0xFF00 + registers.BC.solo.C); }
-void CPU::LD_OFF_C_A() { bus->memory.Write8(0xFF00 + registers.BC.solo.C, registers.AF.solo.A); }
+void CPU::LD_OFF_U8_A() { gb->memory.Write8(0xFF00 + gb->memory.Read8(registers.PC++), registers.AF.solo.A); }
+void CPU::LD_A_OFF_U8() { registers.AF.solo.A = gb->memory.Read8(0xFF00 + gb->memory.Read8(registers.PC++)); }
+void CPU::LD_A_OFF_C() { registers.AF.solo.A = gb->memory.Read8(0xFF00 + registers.BC.solo.C); }
+void CPU::LD_OFF_C_A() { gb->memory.Write8(0xFF00 + registers.BC.solo.C, registers.AF.solo.A); }
 
 // -- ALU -- 
 void CPU::DAA() {
@@ -157,8 +157,8 @@ void CPU::DEC_HL() { registers.HL.pair--; }
 void CPU::INC_SP() { registers.SP++; }
 void CPU::DEC_SP() { registers.SP--; }
 
-void CPU::INC_ADDR_HL() { bus->memory.Write8(registers.HL.pair, bus->memory.Read8(registers.HL.pair) + 1); }
-void CPU::DEC_ADDR_HL() { bus->memory.Write8(registers.HL.pair, bus->memory.Read8(registers.HL.pair) - 1); }
+void CPU::INC_ADDR_HL() { gb->memory.Write8(registers.HL.pair, gb->memory.Read8(registers.HL.pair) + 1); }
+void CPU::DEC_ADDR_HL() { gb->memory.Write8(registers.HL.pair, gb->memory.Read8(registers.HL.pair) - 1); }
 
 void CPU::ADD_A_B() { ADD(registers.BC.solo.B); }
 void CPU::ADD_A_C() { ADD(registers.BC.solo.C); }
@@ -167,8 +167,8 @@ void CPU::ADD_A_E() { ADD(registers.DE.solo.E); }
 void CPU::ADD_A_H() { ADD(registers.HL.solo.H); }
 void CPU::ADD_A_L() { ADD(registers.HL.solo.L); }
 void CPU::ADD_A_A() { ADD(registers.AF.solo.A); }
-void CPU::ADD_A_U8() { ADD(bus->memory.Read8(registers.PC++)); }
-void CPU::ADD_A_ADDR_HL() { ADD(bus->memory.Read8(registers.HL.pair)); }
+void CPU::ADD_A_U8() { ADD(gb->memory.Read8(registers.PC++)); }
+void CPU::ADD_A_ADDR_HL() { ADD(gb->memory.Read8(registers.HL.pair)); }
 
 void CPU::ADC_A_B() { ADC(registers.BC.solo.B); }
 void CPU::ADC_A_C() { ADC(registers.BC.solo.C); }
@@ -177,18 +177,18 @@ void CPU::ADC_A_E() { ADC(registers.DE.solo.E); }
 void CPU::ADC_A_H() { ADC(registers.HL.solo.H); }
 void CPU::ADC_A_L() { ADC(registers.HL.solo.L); }
 void CPU::ADC_A_A() { ADC(registers.AF.solo.A); }
-void CPU::ADC_A_U8() { ADC(bus->memory.Read8(registers.PC++)); }
-void CPU::ADC_A_ADDR_HL() { ADC(bus->memory.Read8(registers.HL.pair)); }
+void CPU::ADC_A_U8() { ADC(gb->memory.Read8(registers.PC++)); }
+void CPU::ADC_A_ADDR_HL() { ADC(gb->memory.Read8(registers.HL.pair)); }
 
 void CPU::ADD_HL_BC() { ADD16(&registers.HL.pair, registers.BC.pair); }
 void CPU::ADD_HL_DE() { ADD16(&registers.HL.pair, registers.DE.pair); }
 void CPU::ADD_HL_HL() { ADD16(&registers.HL.pair, registers.HL.pair); }
 void CPU::ADD_HL_SP() { ADD16(&registers.HL.pair, registers.SP); }
 void CPU::ADD_SP_I8() {
-    uint32_t res = registers.SP + (int8_t)bus->memory.Read8(registers.PC);
+    uint32_t res = registers.SP + (int8_t)gb->memory.Read8(registers.PC);
     
     set_flag(CARRY, ((res & 0x100000000) != 0));
-    set_flag(HALF, (((registers.SP & 0xfff) + ((int8_t)bus->memory.Read8(registers.PC++) & 0xfff)) & 0x1000) != 0);
+    set_flag(HALF, (((registers.SP & 0xfff) + ((int8_t)gb->memory.Read8(registers.PC++) & 0xfff)) & 0x1000) != 0);
     set_flag(NEG, 0);
     set_flag(ZERO, 0);
 
@@ -202,8 +202,8 @@ void CPU::SUB_A_E() { SUB(registers.DE.solo.E); }
 void CPU::SUB_A_H() { SUB(registers.HL.solo.H); }
 void CPU::SUB_A_L() { SUB(registers.HL.solo.L); }
 void CPU::SUB_A_A() { SUB(registers.AF.solo.A); }
-void CPU::SUB_A_U8() { SUB(bus->memory.Read8(registers.PC++)); }
-void CPU::SUB_A_ADDR_HL() { SUB(bus->memory.Read8(registers.HL.pair)); }
+void CPU::SUB_A_U8() { SUB(gb->memory.Read8(registers.PC++)); }
+void CPU::SUB_A_ADDR_HL() { SUB(gb->memory.Read8(registers.HL.pair)); }
 
 void CPU::SBC_A_B() { SBC(registers.BC.solo.B); }
 void CPU::SBC_A_C() { SBC(registers.BC.solo.C); }
@@ -212,8 +212,8 @@ void CPU::SBC_A_E() { SBC(registers.DE.solo.E); }
 void CPU::SBC_A_H() { SBC(registers.HL.solo.H); }
 void CPU::SBC_A_L() { SBC(registers.HL.solo.L); }
 void CPU::SBC_A_A() { SBC(registers.AF.solo.A); }
-void CPU::SBC_A_U8() { SBC(bus->memory.Read8(registers.PC++)); }
-void CPU::SBC_A_ADDR_HL() { SBC(bus->memory.Read8(registers.HL.pair)); }
+void CPU::SBC_A_U8() { SBC(gb->memory.Read8(registers.PC++)); }
+void CPU::SBC_A_ADDR_HL() { SBC(gb->memory.Read8(registers.HL.pair)); }
 
 void CPU::AND_A_B() { AND(registers.BC.solo.B); }
 void CPU::AND_A_C() { AND(registers.BC.solo.C); }
@@ -222,8 +222,8 @@ void CPU::AND_A_E() { AND(registers.DE.solo.E); }
 void CPU::AND_A_H() { AND(registers.HL.solo.H); }
 void CPU::AND_A_L() { AND(registers.HL.solo.L); }
 void CPU::AND_A_A() { AND(registers.AF.solo.A); }
-void CPU::AND_A_U8() { AND(bus->memory.Read8(registers.PC++)); }
-void CPU::AND_A_ADDR_HL() { AND(bus->memory.Read8(registers.HL.pair)); }
+void CPU::AND_A_U8() { AND(gb->memory.Read8(registers.PC++)); }
+void CPU::AND_A_ADDR_HL() { AND(gb->memory.Read8(registers.HL.pair)); }
 
 void CPU::XOR_A_B() { XOR(registers.BC.solo.B); }
 void CPU::XOR_A_C() { XOR(registers.BC.solo.C); }
@@ -232,8 +232,8 @@ void CPU::XOR_A_E() { XOR(registers.DE.solo.E); }
 void CPU::XOR_A_H() { XOR(registers.HL.solo.H); }
 void CPU::XOR_A_L() { XOR(registers.HL.solo.L); }
 void CPU::XOR_A_A() { XOR(registers.AF.solo.A); }
-void CPU::XOR_A_U8() { XOR(bus->memory.Read8(registers.PC++)); }
-void CPU::XOR_A_ADDR_HL() { XOR(bus->memory.Read8(registers.HL.pair)); }
+void CPU::XOR_A_U8() { XOR(gb->memory.Read8(registers.PC++)); }
+void CPU::XOR_A_ADDR_HL() { XOR(gb->memory.Read8(registers.HL.pair)); }
 
 void CPU::OR_A_B() { OR(registers.BC.solo.B); }
 void CPU::OR_A_C() { OR(registers.BC.solo.C); }
@@ -242,8 +242,8 @@ void CPU::OR_A_E() { OR(registers.DE.solo.E); }
 void CPU::OR_A_H() { OR(registers.HL.solo.H); }
 void CPU::OR_A_L() { OR(registers.HL.solo.L); }
 void CPU::OR_A_A() { OR(registers.AF.solo.A); }
-void CPU::OR_A_U8() { OR(bus->memory.Read8(registers.PC++)); }
-void CPU::OR_A_ADDR_HL() { OR(bus->memory.Read8(registers.HL.pair)); }
+void CPU::OR_A_U8() { OR(gb->memory.Read8(registers.PC++)); }
+void CPU::OR_A_ADDR_HL() { OR(gb->memory.Read8(registers.HL.pair)); }
 
 void CPU::CP_A_B() { CP(registers.BC.solo.B); }
 void CPU::CP_A_C() { CP(registers.BC.solo.C); }
@@ -252,21 +252,21 @@ void CPU::CP_A_E() { CP(registers.DE.solo.E); }
 void CPU::CP_A_H() { CP(registers.HL.solo.H); }
 void CPU::CP_A_L() { CP(registers.HL.solo.L); }
 void CPU::CP_A_A() { CP(registers.AF.solo.A); }
-void CPU::CP_A_U8() { CP(bus->memory.Read8(registers.PC++)); }
-void CPU::CP_A_ADDR_HL() { CP(bus->memory.Read8(registers.HL.pair)); }
+void CPU::CP_A_U8() { CP(gb->memory.Read8(registers.PC++)); }
+void CPU::CP_A_ADDR_HL() { CP(gb->memory.Read8(registers.HL.pair)); }
 
 // -- BRANCH --
-void CPU::JR_I8() { JR((int8_t)bus->memory.Read8(registers.PC)); }
-void CPU::JR_C_I8() { if (get_flag(CARRY)) JR((int8_t)bus->memory.Read8(registers.PC)); }
-void CPU::JR_Z_I8() { if (get_flag(ZERO)) JR((int8_t)bus->memory.Read8(registers.PC)); }
-void CPU::JR_NC_I8() { if (!get_flag(CARRY)) JR((int8_t)bus->memory.Read8(registers.PC)); }
-void CPU::JR_NZ_I8() { if (!get_flag(ZERO)) JR((int8_t)bus->memory.Read8(registers.PC)); }
+void CPU::JR_I8() { JR((int8_t)gb->memory.Read8(registers.PC)); }
+void CPU::JR_C_I8() { if (get_flag(CARRY)) JR((int8_t)gb->memory.Read8(registers.PC)); }
+void CPU::JR_Z_I8() { if (get_flag(ZERO)) JR((int8_t)gb->memory.Read8(registers.PC)); }
+void CPU::JR_NC_I8() { if (!get_flag(CARRY)) JR((int8_t)gb->memory.Read8(registers.PC)); }
+void CPU::JR_NZ_I8() { if (!get_flag(ZERO)) JR((int8_t)gb->memory.Read8(registers.PC)); }
 
-void CPU::JP_U16() { JP(bus->memory.Read16(registers.PC)); }
-void CPU::JP_Z_U16() { if (get_flag(ZERO)) JP(bus->memory.Read16(registers.PC)); }
-void CPU::JP_C_U16() { if (get_flag(CARRY)) JP(bus->memory.Read16(registers.PC)); }
-void CPU::JP_NZ_U16() { if (!get_flag(ZERO)) JP(bus->memory.Read16(registers.PC)); }
-void CPU::JP_NC_U16() { if (!get_flag(CARRY)) JP(bus->memory.Read16(registers.PC)); }
+void CPU::JP_U16() { JP(gb->memory.Read16(registers.PC)); }
+void CPU::JP_Z_U16() { if (get_flag(ZERO)) JP(gb->memory.Read16(registers.PC)); }
+void CPU::JP_C_U16() { if (get_flag(CARRY)) JP(gb->memory.Read16(registers.PC)); }
+void CPU::JP_NZ_U16() { if (!get_flag(ZERO)) JP(gb->memory.Read16(registers.PC)); }
+void CPU::JP_NC_U16() { if (!get_flag(CARRY)) JP(gb->memory.Read16(registers.PC)); }
 void CPU::JP_HL() { JP(registers.HL.pair); }
 
 void CPU::PUSH_BC() { PUSH(registers.BC.pair); }
@@ -279,11 +279,11 @@ void CPU::POP_DE() { POP(&registers.DE.pair); }
 void CPU::POP_HL() { POP(&registers.HL.pair); }
 void CPU::POP_AF() { POP(&registers.AF.pair); }
 
-void CPU::CALL_U16() { CALL(bus->memory.Read16(registers.PC)); }
-void CPU::CALL_Z_U16() { if (get_flag(ZERO)) CALL(bus->memory.Read16(registers.PC)); }
-void CPU::CALL_C_U16() { if (get_flag(CARRY)) CALL(bus->memory.Read16(registers.PC)); }
-void CPU::CALL_NZ_U16() { if (!get_flag(ZERO)) CALL(bus->memory.Read16(registers.PC)); }
-void CPU::CALL_NC_U16() { if (!get_flag(CARRY)) CALL(bus->memory.Read16(registers.PC)); }
+void CPU::CALL_U16() { CALL(gb->memory.Read16(registers.PC)); }
+void CPU::CALL_Z_U16() { if (get_flag(ZERO)) CALL(gb->memory.Read16(registers.PC)); }
+void CPU::CALL_C_U16() { if (get_flag(CARRY)) CALL(gb->memory.Read16(registers.PC)); }
+void CPU::CALL_NZ_U16() { if (!get_flag(ZERO)) CALL(gb->memory.Read16(registers.PC)); }
+void CPU::CALL_NC_U16() { if (!get_flag(CARRY)) CALL(gb->memory.Read16(registers.PC)); }
 
 void CPU::RET() { POP(&registers.PC); }
 void CPU::RETI() { /*flags.IME = true; RET();*/ }
@@ -301,9 +301,9 @@ void CPU::RLC_H() { RLC(&registers.HL.solo.H); }
 void CPU::RLC_L() { RLC(&registers.HL.solo.L); }
 void CPU::RLC_A() { RLC(&registers.AF.solo.A); }
 void CPU::RLC_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RLC(&dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::RRC_B() { RRC(&registers.BC.solo.B); }
 void CPU::RRC_C() { RRC(&registers.BC.solo.C); }
@@ -313,9 +313,9 @@ void CPU::RRC_H() { RRC(&registers.HL.solo.H); }
 void CPU::RRC_L() { RRC(&registers.HL.solo.L); }
 void CPU::RRC_A() { RRC(&registers.AF.solo.A); }
 void CPU::RRC_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RRC(&dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 
 void CPU::RL_B() { RL(&registers.BC.solo.B); }
@@ -326,9 +326,9 @@ void CPU::RL_H() { RL(&registers.HL.solo.H); }
 void CPU::RL_L() { RL(&registers.HL.solo.L); }
 void CPU::RL_A() { RL(&registers.AF.solo.A); }
 void CPU::RL_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RL(&dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::RR_B() { RR(&registers.BC.solo.B); }
 void CPU::RR_C() { RR(&registers.BC.solo.C); }
@@ -338,9 +338,9 @@ void CPU::RR_H() { RR(&registers.HL.solo.H); }
 void CPU::RR_L() { RR(&registers.HL.solo.L); }
 void CPU::RR_A() { RR(&registers.AF.solo.A); }
 void CPU::RR_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RR(&dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 
 void CPU::SLA_B() { SLA(&registers.BC.solo.B); }
@@ -351,9 +351,9 @@ void CPU::SLA_H() { SLA(&registers.HL.solo.H); }
 void CPU::SLA_L() { SLA(&registers.HL.solo.L); }
 void CPU::SLA_A() { SLA(&registers.AF.solo.A); }
 void CPU::SLA_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SLA(&dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::SRA_B() { SRA(&registers.BC.solo.B); }
 void CPU::SRA_C() { SRA(&registers.BC.solo.C); }
@@ -363,9 +363,9 @@ void CPU::SRA_H() { SRA(&registers.HL.solo.H); }
 void CPU::SRA_L() { SRA(&registers.HL.solo.L); }
 void CPU::SRA_A() { SRA(&registers.AF.solo.A); }
 void CPU::SRA_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SRA(&dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::SRL_B() { SRL(&registers.BC.solo.B); }
 void CPU::SRL_C() { SRL(&registers.BC.solo.C); }
@@ -375,9 +375,9 @@ void CPU::SRL_H() { SRL(&registers.HL.solo.H); }
 void CPU::SRL_L() { SRL(&registers.HL.solo.L); }
 void CPU::SRL_A() { SRL(&registers.AF.solo.A); }
 void CPU::SRL_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SRL(&dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 
 void CPU::RLCA() {
@@ -424,9 +424,9 @@ void CPU::SWAP_H() { SWAP(&registers.HL.solo.H); }
 void CPU::SWAP_L() { SWAP(&registers.HL.solo.L); }
 void CPU::SWAP_A() { SWAP(&registers.AF.solo.A); }
 void CPU::SWAP_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SWAP(&dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 
 void CPU::BIT_0_B() { BIT(0, registers.BC.solo.B); }
@@ -485,14 +485,14 @@ void CPU::BIT_7_E() { BIT(7, registers.DE.solo.E); }
 void CPU::BIT_7_H() { BIT(7, registers.HL.solo.H); }
 void CPU::BIT_7_L() { BIT(7, registers.HL.solo.L); }
 void CPU::BIT_7_A() { BIT(7, registers.AF.solo.A); }
-void CPU::BIT_0_ADDR_HL() { BIT(0, bus->memory.Read8(registers.HL.pair)); }
-void CPU::BIT_1_ADDR_HL() { BIT(1, bus->memory.Read8(registers.HL.pair)); }
-void CPU::BIT_2_ADDR_HL() { BIT(2, bus->memory.Read8(registers.HL.pair)); }
-void CPU::BIT_3_ADDR_HL() { BIT(3, bus->memory.Read8(registers.HL.pair)); }
-void CPU::BIT_4_ADDR_HL() { BIT(4, bus->memory.Read8(registers.HL.pair)); }
-void CPU::BIT_5_ADDR_HL() { BIT(5, bus->memory.Read8(registers.HL.pair)); }
-void CPU::BIT_6_ADDR_HL() { BIT(6, bus->memory.Read8(registers.HL.pair)); }
-void CPU::BIT_7_ADDR_HL() { BIT(7, bus->memory.Read8(registers.HL.pair)); }
+void CPU::BIT_0_ADDR_HL() { BIT(0, gb->memory.Read8(registers.HL.pair)); }
+void CPU::BIT_1_ADDR_HL() { BIT(1, gb->memory.Read8(registers.HL.pair)); }
+void CPU::BIT_2_ADDR_HL() { BIT(2, gb->memory.Read8(registers.HL.pair)); }
+void CPU::BIT_3_ADDR_HL() { BIT(3, gb->memory.Read8(registers.HL.pair)); }
+void CPU::BIT_4_ADDR_HL() { BIT(4, gb->memory.Read8(registers.HL.pair)); }
+void CPU::BIT_5_ADDR_HL() { BIT(5, gb->memory.Read8(registers.HL.pair)); }
+void CPU::BIT_6_ADDR_HL() { BIT(6, gb->memory.Read8(registers.HL.pair)); }
+void CPU::BIT_7_ADDR_HL() { BIT(7, gb->memory.Read8(registers.HL.pair)); }
 
 void CPU::RES_0_B() { RES(0, &registers.BC.solo.B); }
 void CPU::RES_0_C() { RES(0, &registers.BC.solo.C); }
@@ -551,44 +551,44 @@ void CPU::RES_7_H() { RES(7, &registers.HL.solo.H); }
 void CPU::RES_7_L() { RES(7, &registers.HL.solo.L); }
 void CPU::RES_7_A() { RES(7, &registers.AF.solo.A); }
 void CPU::RES_0_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RES(0, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::RES_1_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RES(1, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::RES_2_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RES(2, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::RES_3_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RES(3, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::RES_4_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RES(4, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::RES_5_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RES(5, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::RES_6_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RES(6, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::RES_7_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     RES(7, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 
 void CPU::SET_0_B() { SET(0, &registers.BC.solo.B); }
@@ -648,44 +648,44 @@ void CPU::SET_7_H() { SET(7, &registers.HL.solo.H); }
 void CPU::SET_7_L() { SET(7, &registers.HL.solo.L); }
 void CPU::SET_7_A() { SET(7, &registers.AF.solo.A); }
 void CPU::SET_0_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SET(0, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::SET_1_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SET(1, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::SET_2_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SET(2, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::SET_3_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SET(3, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::SET_4_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SET(4, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::SET_5_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SET(5, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::SET_6_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SET(6, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 void CPU::SET_7_ADDR_HL() {
-    uint8_t dst = bus->memory.Read8(registers.HL.pair);
+    uint8_t dst = gb->memory.Read8(registers.HL.pair);
     SET(7, &dst);
-    bus->memory.Write8(registers.HL.pair, dst);
+    gb->memory.Write8(registers.HL.pair, dst);
 }
 
 // -- SYSTEM --

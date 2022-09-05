@@ -1,37 +1,35 @@
-#include "memory.h"
+#include "gameboy.h"
 
 // Constructor
 void Memory::Reset() {
+    gb->debug.Log("Resetting Memory");
     memset(memory, 0, 0xFFFF);
-    Mapper(0x4000, bus->cartridge->mbc->GetRomBank(), 0x4000);
-    Mapper(0xA000, bus->cartridge->mbc->GetRomBank(), 0x2000); 
 }
 
 // Write Operations
 void Memory::Write8(const uint16_t loc, const uint8_t byte) {
     if ((loc & 0x0000) || (loc & 0x1000)) {
-        bus->cartridge->mbc->SetRamAccess(byte);
+        gb->cartridge.mbc->SetRamAccess(byte);
     }
     else if ((loc & 0x2000) || (loc & 0x3000)) {
-        bus->cartridge->mbc->SetRomBank(byte); 
-        Mapper(0x4000, bus->cartridge->mbc->GetRomBank(), 0x4000); 
+        gb->cartridge.mbc->SetRomBank(byte);
+        Mapper(0x4000, gb->cartridge.mbc->GetRomBank(), 0x4000);
     }
     else if ((loc & 0x4000) || (loc & 0x5000)) {
-        bus->cartridge->mbc->SetRamBank(byte);
-        Mapper(0xA000, bus->cartridge->mbc->GetRamBank(), 0x2000);
+        gb->cartridge.mbc->SetRamBank(byte);
+        Mapper(0xA000, gb->cartridge.mbc->GetRamBank(), 0x2000);
     }
     else if ((loc & 0x6000) || (loc & 0x7000)) {
-        bus->cartridge->mbc->SetBankMode(byte);
+        gb->cartridge.mbc->SetBankMode(byte);
     }
     else if ((loc & 0xA000) || (loc & 0xB000)) {
-        if (bus->cartridge->mbc->GetRamAccess() == 0x0A) {
+        if (gb->cartridge.mbc->GetRamAccess() == 0x0A) {
             **(memory + loc) = byte;
         }
     }
     else if (loc & 0xC000 || loc & 0xD000) {
         **(memory + loc) = byte;
     }
-
 }
 
 // Read Operations
@@ -48,9 +46,26 @@ uint16_t Memory::Read16(const uint16_t loc) {
 }
 
 // Mapping
-void Memory::Mapper(const uint16_t loc,  uint8_t *array, const size_t size) {
-    for (int i = 0; i < size; i++) {
-        *(memory + i + loc) = array + i;
+void Memory::Mapper(const uint16_t loc, uint8_t* array, const size_t size) {
+    if (array != nullptr) {
+        for (size_t i = 0; i < size; i++) *(memory + i + loc) = array + i;
+    }
+    else gb->debug.Log("Attempted to map nullptr array!");
+}
+
+void Memory::Prepare() {
+    /* Detect MBC type */
+    if (gb->cartridge.GetMBCType().find("ROM") != std::string::npos) {
+        Mapper(0x0000, gb->cartridge.mbc->GetRomBank(), 0x8000);
+    }
+    else if (gb->cartridge.GetMBCType().find("MBC1") != std::string::npos) {
+        Mapper(0x0000, gb->cartridge.mbc->GetRomBank(0), 0x4000);
+        Mapper(0x4000, gb->cartridge.mbc->GetRomBank(), 0x4000);
+    }
+
+    /* Detect RAM */
+    if (gb->cartridge.GetMBCType().find("RAM") != std::string::npos) {
+        Mapper(0xA000, gb->cartridge.mbc->GetRamBank(), 0x2000);
     }
 }
 
@@ -62,6 +77,6 @@ bool Memory::VerifyLogo() {
         0xBB, 0xBB, 0x67, 0x63, 0x6E, 0x0E, 0xEC, 0xCC, 0xDD, 0xDC, 0x99, 0x9F, 0xBB, 0xB9, 0x33, 0x3E
     };
 
-    if (memcmp(logo, *(memory + 0x104), 0x18) != 0) return false;
+    if (memcmp(logo, memory[104], 0x18) != 0) return false;
     return true;
 }

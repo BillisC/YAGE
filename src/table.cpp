@@ -1,4 +1,4 @@
-#include "cpu.h"
+#include "gameboy.h"
 
 void CPU::Preload() {
     // 0x00

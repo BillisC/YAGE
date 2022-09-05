@@ -5,13 +5,15 @@
 #include <fstream>
 #include <stdint.h>
 
+#include "tools.h"
 #include "mbc.h"
 #include "mbc1.h"
 
+class Gameboy;
+
 class Cartridge {
-private:
     struct Header {
-        char title[16];
+        uint8_t title[16];
         uint8_t cgb_flag;
         uint8_t licensee[2];
         uint8_t sgb_flag;
@@ -25,23 +27,27 @@ private:
         uint8_t checksum_global[2];
     } header;
 
-public:
-    MBC_TEMPLATE* mbc;
-
-private:
-    Gameboy* bus;
-    uint8_t* filebuf;
+    Gameboy* gb;
 
 public:
-    Cartridge(Gameboy* mbus): bus(mbus) {}
-    ~Cartridge() { delete mbc; }
+    Cartridge(Gameboy* mbus) : gb(mbus) {}
+    ~Cartridge() { Reset(); }
 
-    int Init(const std::string file_name) { LoadFile(file_name); }
+    // Initialization
+    int Init(const std::string file_name);
+    void Reset();
 
 private:
     int LoadFile(const std::string file_name);
-    void InitHeader();
-    void InitMBC();
+    void InitHeader(uint8_t* filebuf);
+    void InitMBC(uint8_t* filebuf);
+
+public:
+    MBC_TEMPLATE* mbc;
+
+    // Cartridge info
+    std::string GetMBCType();
+    std::string GetTitle();
 };
 
 

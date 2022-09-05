@@ -3,8 +3,8 @@
 
 #include "stdint.h"
 
-uint8_t** Allocator2D(int rows, int columns) {
-    uint8_t **tmp;
+inline uint8_t** Allocator2D(int rows, int columns) {
+    uint8_t** tmp;
 
     tmp = new uint8_t * [rows];
     for (int i = 0; i < rows; i++) {
@@ -14,14 +14,12 @@ uint8_t** Allocator2D(int rows, int columns) {
     return tmp;
 }
 
-void Deallocator2D(int rows, int columns, uint8_t **tmp) {
-    uint8_t **temp;
-
+inline void Deallocator2D(int rows, int columns, uint8_t **tmp) {
     for (int i = 0; i < rows; i++) {
-        delete[] temp[i];
+        delete[] tmp[i];
     }
 
-    delete[] temp;
+    delete[] tmp;
 }
 
 #endif

@@ -7,9 +7,13 @@
 class MBC1 : public MBC_TEMPLATE {
 public:
     MBC1() {}
-    ~MBC1() { Deallocator2D(rom_banks_count, 0x4000, rom_banks); if(ram_banks_count) Deallocator2D(ram_banks_count, 0x2000, ram_banks); }
+    ~MBC1() {
+        Deallocator2D(rom_banks_count, 0x4000, rom_banks);
+        if (ram_banks_count) Deallocator2D(ram_banks_count, 0x2000, ram_banks);
+    }
 
     uint8_t* GetRomBank() { return (registers.BANK_MODE == 0) ? rom_banks[(registers.RAM_BANK << 5) | registers.ROM_BANK] : rom_banks[registers.ROM_BANK]; }
+    uint8_t* GetRomBank(uint8_t bank) { return rom_banks[bank]; }
     uint8_t* GetRamBank() { return (registers.BANK_MODE == 0) ? ram_banks[0] : ram_banks[registers.RAM_BANK]; }
     uint8_t GetRamAccess() { return registers.RAM_ENABLE; }
     bool GetBankMode() { return registers.BANK_MODE; }
@@ -18,11 +22,12 @@ public:
     void SetRamAccess(uint8_t val) { registers.RAM_ENABLE = val; }
     void SetBankMode(uint8_t mode) { registers.BANK_MODE = mode; }
 
-    void Init(const uint8_t romsize, const uint8_t ramsize, uint8_t* file) {
+    int Init(const uint8_t romsize, const uint8_t ramsize, uint8_t* file) {
         // Initialize ROM space
         rom_banks_count = (32 << romsize) / 16;
         rom_banks = Allocator2D(rom_banks_count, 0x4000);
-        for(int i = 0; i < rom_banks_count; i++) memcpy(rom_banks[i], file + 150, 0x4000); 
+        for (int i = 0; i < rom_banks_count; i++) memcpy(rom_banks[i], file + (i * 0x4000), 0x4000);
+        if (rom_banks == nullptr) return 1;
 
         // Initialize RAM space
         switch (ramsize) {
@@ -32,13 +37,18 @@ public:
             case 0x5: ram_banks_count = 8; break;
             default: ram_banks_count = 0;
         };
-        if (ram_banks_count) ram_banks = Allocator2D(ram_banks_count, 0x2000);
+        if (ram_banks_count) {
+            ram_banks = Allocator2D(ram_banks_count, 0x2000);
+            if (ram_banks == nullptr) return 1;
+        }
 
         // Initialize registers
         SetRomBank(0);
         SetRamBank(0);
         SetRamAccess(0);
         SetBankMode(0);
+
+        return 0;
     }
 };
 

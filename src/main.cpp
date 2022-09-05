@@ -1,23 +1,20 @@
 #include <chrono>
 
-#include "bus.h"
+#include "gameboy.h"
 
 int main() {
-    //bool active = false;
 
     // Setup Environment
-    Gameboy* gb_system = new Gameboy;
+    Gameboy gb;
 
-    if (gb_system->Load("roms/cpu_instrs.gb") != 1) {
-        printf("Initialization Failure!\n");
-
+    if (gb.Load("roms/cpu_instrs.gb") != 1) {
         return -1;
     }
 
-    gb_system->Reset();
-    gb_system->debug.MemoryBuffer();
+    gb.debug.MemoryBuffer();
 
-    // Actual Loop
+    gb.debug.Log("------------------");
+
     //std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
     //while (active) {
     //    if (std::chrono::duration<double, std::nano>(std::chrono::system_clock::now() - last).count() > 238.41) {
@@ -26,8 +23,6 @@ int main() {
     //        last = std::chrono::system_clock::now();
     //    }
     //}
-
-    delete gb_system;
 
     return 0;
 }

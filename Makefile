@@ -1,11 +1,11 @@
 all: exec
 
 TARGET := gameboyemu
-CFLAGS := -Wall
-OBJECTFILES := build/main.o build/cpu.o build/instructions_inlines.o build/instructions.o build/table.o build/memory.o build/cartridge.o 
+CFLAGS := -g -Wall
+OBJECTFILES := build/main.o build/gameboy.o build/cpu.o build/instructions_inlines.o build/instructions.o build/table.o build/memory.o build/cartridge.o build/debugger.o
 
 # Checking
-exec: linker
+exec: clean linker
 	@./${TARGET}
 
 # Linking
@@ -16,6 +16,10 @@ linker: build debug ${OBJECTFILES}
 # Compiling
 build/main.o: src/main.cpp
 	@echo "Compiling main.."
+	@g++ ${CFLAGS} -c $< -o $@
+
+build/gameboy.o: src/gameboy.cpp
+	@echo "Compiling bus.."
 	@g++ ${CFLAGS} -c $< -o $@
 
 build/cpu.o: src/cpu.cpp
@@ -40,6 +44,10 @@ build/table.o: src/table.cpp
 
 build/cartridge.o: src/cartridge.cpp
 	@echo "Compiling cartridge.."
+	@g++ ${CFLAGS} -c $< -o $@
+
+build/debugger.o: src/debugger.cpp
+	@echo "Compiling debugger.."
 	@g++ ${CFLAGS} -c $< -o $@
 
 # Folder generation
