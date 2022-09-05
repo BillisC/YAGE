@@ -50,7 +50,12 @@ void Memory::Mapper(const uint16_t loc, uint8_t* array, const size_t size) {
     if (array != nullptr) {
         for (size_t i = 0; i < size; i++) *(memory + i + loc) = array + i;
     }
+<<<<<<< HEAD
+
+    gb->debug.Log("Attempted to map nullptr array!");
+=======
     else gb->debug.Log("Attempted to map nullptr array!");
+>>>>>>> main
 }
 
 void Memory::Prepare() {
