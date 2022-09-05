@@ -7,7 +7,7 @@ int Gameboy::Load(const std::string file_name) {
         debug.Log("File Loaded");
     }
     else rom_loaded = false;
-
+    
     return rom_loaded;
 }
 
