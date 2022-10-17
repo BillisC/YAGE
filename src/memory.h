@@ -12,12 +12,12 @@
      Empty but unusable for I/O     | 0xFEA0 - 0xFEFF
      Sprite Attrib Memory (OAM)     | 0xFE00 - 0xFE9F
      Echo of Work RAM               | 0xE000 - 0xFDFF
-     4kB Work RAM, switchable (1-7) | 0xD000 - 0xDFFF
-     4kB Work RAM                   | 0xC000 - 0xCFFF
-     8kB External RAM (catridge)    | 0xA000 - 0xBFFF
-     8kB Video RAM                  | 0x8000 - 0x9FFF
-     16kB switchable ROM bank       | 0x4000 - 0x7FFF
-     16kB ROM bank #0               | 0x0000 - 0x3FFF
+     4kB Work RAM, switchable (1-7) | 0xD000 - 0xDFFF 
+     4kB Work RAM                   | 0xC000 - 0xCFFF :check:
+     8kB External RAM (catridge)    | 0xA000 - 0xBFFF :check:
+     8kB Video RAM                  | 0x8000 - 0x9FFF 
+     16kB switchable ROM bank       | 0x4000 - 0x7FFF :check:
+     16kB ROM bank #0               | 0x0000 - 0x3FFF :check:
     --------------------------- */
 
 class Memory {

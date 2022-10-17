@@ -12,7 +12,6 @@ int main() {
     }
 
     gb.debug.MemoryBuffer();
-
     gb.debug.Log("------------------");
 
     //std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
