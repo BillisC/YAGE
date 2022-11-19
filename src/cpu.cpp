@@ -9,21 +9,30 @@ void CPU::Reset() {
     registers.DE.solo.D = 0x00; registers.DE.solo.E = 0xD8;
     registers.HL.solo.H = 0x01; registers.HL.solo.L = 0x4D;
     registers.SP = 0xFFFE;
-    registers.PC = 0x100;
+    registers.PC = 0x0000;
 }
 
 void CPU::Fetch() {
     bool chk = (gb->memory.Read8(registers.PC) == 0xCB);
     registers.PC += chk;
 
+    uint32_t prev_pc = registers.PC;
     uint8_t opcode = gb->memory.Read8(registers.PC++);
 
+    printf("\nB:0x%02X C:0x%02X D:0x%02X E:0x%02X H:0x%02X L:0x%02X A:0x%02X F:0x%02X | PC:0x%04X SP:0x%04X\n", 
+                        registers.BC.solo.B, registers.BC.solo.C, 
+                        registers.DE.solo.D, registers.DE.solo.E, 
+                        registers.HL.solo.H, registers.HL.solo.L, 
+                        registers.AF.solo.A, registers.AF.solo.F,
+                        registers.PC, registers.SP);
     if (!chk) {
-        gb->debug.Log("Code: " + std::to_string(opcode) + " | Name: " + std::string(InstructionTable[opcode].name));
+        printf("PC: 0x%X | Code: 0x%X | Name: %s\n", prev_pc, opcode, InstructionTable[opcode].name);
         ((*this).*(InstructionTable[opcode].ipr))();
+        //if(prev_pc == 0xE9) { gb->debug.MemoryBuffer(); std::cin.get(); } /* Breakpoint */ 
     }
     else {
-        gb->debug.Log("Code: CB " + std::to_string(opcode) + " | Name: " + std::string(InstructionTable[opcode].name));
+        printf("PC: 0x%X | Code: 0xCB%X | Name: %s\n\n", prev_pc, opcode, CB_InstructionTable[opcode].name);
         ((*this).*(CB_InstructionTable[opcode].ipr))();
+        printf("\n");
     }
 }

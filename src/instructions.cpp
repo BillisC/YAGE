@@ -4,15 +4,40 @@
 void CPU::NOP() {}
 
 // -- LOAD --
-void CPU::LD_B_U8() { registers.BC.solo.B = gb->memory.Read8(registers.PC++); }
-void CPU::LD_C_U8() { registers.BC.solo.C = gb->memory.Read8(registers.PC++); }
-void CPU::LD_D_U8() { registers.DE.solo.D = gb->memory.Read8(registers.PC++); }
-void CPU::LD_E_U8() { registers.DE.solo.E = gb->memory.Read8(registers.PC++); }
-void CPU::LD_H_U8() { registers.HL.solo.H = gb->memory.Read8(registers.PC++); }
-void CPU::LD_L_U8() { registers.HL.solo.L = gb->memory.Read8(registers.PC++); }
-void CPU::LD_A_U8() { registers.AF.solo.A = gb->memory.Read8(registers.PC++); }
+void CPU::LD_B_U8() { 
+    uint8_t r8 = gb->memory.Read8(registers.PC++);
+    registers.BC.solo.B = r8;
+}
+void CPU::LD_C_U8() { 
+    uint8_t r8 = gb->memory.Read8(registers.PC++);
+    registers.BC.solo.C = r8;
+}
+void CPU::LD_D_U8() { 
+    uint8_t r8 = gb->memory.Read8(registers.PC++);
+    registers.DE.solo.D = r8;
+}
+void CPU::LD_E_U8() { 
+    uint8_t r8 = gb->memory.Read8(registers.PC++);
+    registers.DE.solo.E = r8;
+}
+void CPU::LD_H_U8() { 
+    uint8_t r8 = gb->memory.Read8(registers.PC++);
+    registers.HL.solo.H = r8;
+}
+void CPU::LD_L_U8() { 
+    uint8_t r8 = gb->memory.Read8(registers.PC++);
+    registers.HL.solo.L = r8;
+}
+void CPU::LD_A_U8() {
+    uint8_t r8 = gb->memory.Read8(registers.PC++);
+    registers.AF.solo.A = r8;
+}
 
-void CPU::LD_SP_U16() { registers.SP = gb->memory.Read16(registers.PC); }
+void CPU::LD_SP_U16() {
+    uint16_t r16  = gb->memory.Read16(registers.PC);
+    registers.PC += 2;
+    registers.SP = r16; 
+}
 void CPU::LD_SP_HL() { registers.SP = registers.HL.pair; }
 
 void CPU::LD_A_ADDR_BC() { registers.AF.solo.A = gb->memory.Read8(registers.BC.pair); }
@@ -256,17 +281,52 @@ void CPU::CP_A_U8() { CP(gb->memory.Read8(registers.PC++)); }
 void CPU::CP_A_ADDR_HL() { CP(gb->memory.Read8(registers.HL.pair)); }
 
 // -- BRANCH --
-void CPU::JR_I8() { JR((int8_t)gb->memory.Read8(registers.PC)); }
-void CPU::JR_C_I8() { if (get_flag(CARRY)) JR((int8_t)gb->memory.Read8(registers.PC)); }
-void CPU::JR_Z_I8() { if (get_flag(ZERO)) JR((int8_t)gb->memory.Read8(registers.PC)); }
-void CPU::JR_NC_I8() { if (!get_flag(CARRY)) JR((int8_t)gb->memory.Read8(registers.PC)); }
-void CPU::JR_NZ_I8() { if (!get_flag(ZERO)) JR((int8_t)gb->memory.Read8(registers.PC)); }
+void CPU::JR_I8() { 
+    int8_t dst = (int8_t)gb->memory.Read8(registers.PC++);
+    JR(dst); 
+}
+void CPU::JR_C_I8() { 
+    int8_t dst = (int8_t)gb->memory.Read8(registers.PC++); 
+    if (get_flag(CARRY)) JR(dst); 
+}
+void CPU::JR_Z_I8() { 
+    int8_t dst = (int8_t)gb->memory.Read8(registers.PC++); 
+    if (get_flag(ZERO)) JR(dst); 
+}
+void CPU::JR_NC_I8() { 
+    int8_t dst = (int8_t)gb->memory.Read8(registers.PC++); 
+    if (!get_flag(CARRY)) JR(dst); 
+}
+void CPU::JR_NZ_I8() { 
+    int8_t dst = (int8_t)gb->memory.Read8(registers.PC++); 
+    if (!get_flag(ZERO)) JR(dst); 
+}
 
-void CPU::JP_U16() { JP(gb->memory.Read16(registers.PC)); }
-void CPU::JP_Z_U16() { if (get_flag(ZERO)) JP(gb->memory.Read16(registers.PC)); }
-void CPU::JP_C_U16() { if (get_flag(CARRY)) JP(gb->memory.Read16(registers.PC)); }
-void CPU::JP_NZ_U16() { if (!get_flag(ZERO)) JP(gb->memory.Read16(registers.PC)); }
-void CPU::JP_NC_U16() { if (!get_flag(CARRY)) JP(gb->memory.Read16(registers.PC)); }
+void CPU::JP_U16() {
+    uint16_t dst = gb->memory.Read16(registers.PC); 
+    registers.PC += 2;
+    JP(dst); 
+}
+void CPU::JP_Z_U16() { 
+    uint16_t dst = gb->memory.Read16(registers.PC); 
+    registers.PC += 2;
+    if (get_flag(ZERO)) JP(dst); 
+}
+void CPU::JP_C_U16() { 
+    uint16_t dst = gb->memory.Read16(registers.PC); 
+    registers.PC += 2;
+    if (get_flag(CARRY)) JP(dst); 
+}
+void CPU::JP_NZ_U16() { 
+    uint16_t dst = gb->memory.Read16(registers.PC); 
+    registers.PC += 2;
+    if (!get_flag(ZERO)) JP(dst); 
+}
+void CPU::JP_NC_U16() { 
+    uint16_t dst = gb->memory.Read16(registers.PC); 
+    registers.PC += 2;
+    if (!get_flag(CARRY)) JP(dst); 
+}
 void CPU::JP_HL() { JP(registers.HL.pair); }
 
 void CPU::PUSH_BC() { PUSH(registers.BC.pair); }

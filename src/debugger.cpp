@@ -6,10 +6,10 @@ void Debugger::MemoryBuffer() {
     std::fstream buffer_file(buffer_name, std::ios::out | std::ios::binary);
 
     if (buffer_file.is_open()) {
-        uint8_t* buffer = new uint8_t[0x4000];
-        gb->memory.Read(0x0000, buffer, 0x4000);
+        uint8_t* buffer = new uint8_t[0x10000];
+        gb->memory.Read(0x0000, buffer, 0x10000);
 
-        buffer_file.write(reinterpret_cast<char*>(buffer), 0x4000);
+        buffer_file.write(reinterpret_cast<char*>(buffer), 0x10000);
         if (buffer_file.fail()) Log("Memory Copy Failed!");
 
         delete[] buffer;

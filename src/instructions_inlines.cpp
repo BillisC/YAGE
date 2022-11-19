@@ -109,7 +109,7 @@ void CPU::CP(uint8_t val) {
     set_flag(CARRY, (((registers.AF.solo.A - val) & 0x100) != 0));
     set_flag(HALF, (((registers.AF.solo.A & 0xf) - (val & 0xf)) & 0x10));
     set_flag(NEG, 1);
-    set_flag(ZERO, (registers.AF.solo.A == 0));
+    set_flag(ZERO, ((registers.AF.solo.A - val) == 0));
 }
 
 // -- BRANCH --
@@ -124,8 +124,8 @@ void CPU::PUSH(uint16_t reg) {
     gb->memory.Write8(registers.SP--, (uint8_t)reg);
 }
 void CPU::POP(uint16_t* reg) {
-    *reg = gb->memory.Read8(++registers.SP);
-    *reg |= (gb->memory.Read8(++registers.SP) << 8);
+    *reg = gb->memory.Read16(++registers.SP);
+    registers.SP++;
 }
 void CPU::CALL(uint16_t loc) {
     registers.PC += 2;

@@ -3,25 +3,25 @@
 #include "gameboy.h"
 
 int main() {
+    bool active = true;
 
     // Setup Environment
-    Gameboy gb;
+    Gameboy *gb = new Gameboy;
 
-    if (gb.Load("roms/cpu_instrs.gb") != 1) {
+    if (gb->Load("roms/cpu_instrs.gb") != 1) {
         return -1;
     }
 
-    gb.debug.MemoryBuffer();
-    gb.debug.Log("------------------");
+    gb->debug.MemoryBuffer();
+    gb->debug.Log("------------------");
 
     //std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
-    //while (active) {
-    //    if (std::chrono::duration<double, std::nano>(std::chrono::system_clock::now() - last).count() > 238.41) {
-    //        gb_system->Fetch();
-    //
-    //        last = std::chrono::system_clock::now();
-    //    }
-    //}
+    while (active) {
+        gb->cpu.Fetch();
+        //std::cin.get();
+
+        //last = std::chrono::system_clock::now();
+    }
 
     return 0;
 }

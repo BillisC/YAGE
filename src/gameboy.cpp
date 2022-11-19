@@ -1,14 +1,15 @@
 #include "gameboy.h"
 
-int Gameboy::Load(const std::string file_name) {
-    if(cartridge.Init(file_name) == 0) {
+int Gameboy::Load(const std::string rom_name) {
+    bool all_good = true;
+    
+    if(cartridge.Init(rom_name) == 0) {
         memory.Prepare();
-        rom_loaded = true;
         debug.Log("File Loaded");
     }
-    else rom_loaded = false;
-
-    return rom_loaded;
+    else all_good = false;
+        
+    return all_good;
 }
 
 void Gameboy::Reset() {
