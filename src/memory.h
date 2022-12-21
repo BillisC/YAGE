@@ -38,10 +38,10 @@ enum IO_Registers {
     NR11    = 0xFF11,  // Channel 1
     NR12    = 0xFF12,  // Channel 1
     NR13    = 0xFF13,  // Channel 1
-    NR20    = 0xFF00,  // Channel 2??
-    NR21    = 0xFF00,  // Channel 2??
-    NR22    = 0xFF00,  // Channel 2??
-    NR23    = 0xFF00,  // Channel 2??
+    //NR20    = 0xFF00,  // Channel 2??
+    //NR21    = 0xFF00,  // Channel 2??
+    //NR22    = 0xFF00,  // Channel 2??
+    //NR23    = 0xFF00,  // Channel 2??
     NR30    = 0xFF1A,  // Channel 3
     NR31    = 0xFF1B,  // Channel 3
     NR32    = 0xFF1C,  // Channel 3
@@ -95,7 +95,7 @@ public:
     void Write8(const uint16_t loc, const uint8_t byte);
 
     // Read operations
-    void Read(const uint16_t loc, uint8_t* buffer, const size_t size);
+    void Read(const uint16_t loc, uint8_t* const buffer, const size_t size);
     uint8_t Read8(const uint16_t loc);
     uint16_t Read16(const uint16_t loc);
 

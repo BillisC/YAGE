@@ -53,6 +53,8 @@ public:
     void Reset();
     void Fetch();
 
+    void CatchUp(uint8_t cycles);
+
 private:
     // Generic Functions
     void set_flag(Flags flag, bool val);
