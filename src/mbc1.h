@@ -22,12 +22,12 @@ public:
     void SetRamAccess(uint8_t val) { registers.RAM_ENABLE = val; }
     void SetBankMode(uint8_t mode) { registers.BANK_MODE = mode; }
 
-    int Init(const uint8_t romsize, const uint8_t ramsize, uint8_t* file) {
+    bool Init(const uint8_t romsize, const uint8_t ramsize, uint8_t* file) {
         // Initialize ROM space
         rom_banks_count = (32 << romsize) / 16;
         rom_banks = Allocator2D(rom_banks_count, 0x4000);
         for (int i = 0; i < rom_banks_count; i++) memcpy(rom_banks[i], file + (i * 0x4000), 0x4000);
-        if (rom_banks == nullptr) return 1;
+        if (rom_banks == nullptr) return false;
 
         // Initialize RAM space
         switch (ramsize) {
@@ -39,7 +39,7 @@ public:
         };
         if (ram_banks_count) {
             ram_banks = Allocator2D(ram_banks_count, 0x2000);
-            if (ram_banks == nullptr) return 1;
+            if (ram_banks == nullptr) return false;
         }
 
         // Initialize registers
@@ -48,7 +48,7 @@ public:
         SetRamAccess(0);
         SetBankMode(0);
 
-        return 0;
+        return true;
     }
 };
 

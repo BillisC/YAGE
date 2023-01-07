@@ -21,7 +21,7 @@ protected:
 public:
     virtual ~MBC_TEMPLATE() {}
 
-    virtual int Init(const uint8_t romsize, const uint8_t ramsize, uint8_t* file) = 0;
+    virtual bool Init(const uint8_t romsize, const uint8_t ramsize, uint8_t* file) = 0;
 
     virtual uint8_t* GetRomBank() = 0;
     virtual uint8_t* GetRomBank(uint8_t bank) = 0;
@@ -56,12 +56,12 @@ public:
     void SetRamAccess(uint8_t val) {}
     void SetBankMode(uint8_t mode) {}
 
-    int Init(const uint8_t romsize, const uint8_t ramsize, uint8_t* file) {
+    bool Init(const uint8_t romsize, const uint8_t ramsize, uint8_t* file) {
         // Initialize ROM space
         rom_banks_count = 1;
         rom_banks = Allocator2D(rom_banks_count, 0x8000);
         memcpy(rom_banks[0], file + 0x150, 0x8000);
-        if (rom_banks == nullptr) return 1;
+        if (rom_banks == nullptr) return false;
 
         // Initialize RAM space
         switch (ramsize) {
@@ -70,10 +70,10 @@ public:
         };
         if (ram_banks_count != 0) {
             ram_banks = Allocator2D(ram_banks_count, 0x2000);
-            if (rom_banks == nullptr) return 1;
+            if (rom_banks == nullptr) return false;
         }
 
-        return 0;
+        return true;
     }
 };
 

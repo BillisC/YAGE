@@ -58,7 +58,10 @@ void Memory::Mapper(const uint16_t loc, uint8_t* array, const size_t size) {
     if (array != nullptr) {
         for (size_t i = 0; i < size; i++) *(memory + i + loc) = array + i;
     }
-    else gb->debug.Log("Attempted to map nullptr array!");
+    else {
+        gb->debug.Log("Attempted to map nullptr array!");
+        gb->debug.ForceStop(3);
+    }
 }
 
 void Memory::Prepare() {
@@ -93,10 +96,6 @@ void Memory::Prepare() {
     memset(OAM, 0x0, (0x9F + 1) * sizeof(uint8_t));
     Mapper(0xFE00, OAM, 0x9F + 1);
 
-    /* Restricted IO area [0xFEA0-0xFEFF] */
-    memset(restrio, 0x0, (0x5F + 1) * sizeof(uint8_t));
-    Mapper(0xFF00, restrio, 0x5F + 1);
-
     /* The rest upper part [0xFF00-0xFFFF] */
     memset(ioregs, 0x0, (0xFF + 1) * sizeof(uint8_t));
     Mapper(0xFF00, ioregs, 0xFF + 1);
@@ -108,11 +107,17 @@ void Memory::Prepare() {
 void Memory::LoadBootstrap() {
     gb->debug.Log("Loading Bootstrap");
     std::fstream boot("DMG_ROM.bin", std::ios::in | std::ios::binary);
+    if (!boot.is_open()) {
+        gb->debug.Log("Failed to open DMG_ROM.bin!");
+        gb->debug.ForceStop(2);
+    }
 
     /* Buffer catridge data */
     boot.read(reinterpret_cast<char*>(BOOTSTRAP), 0xFF + 1);
     if (boot.fail()) {
+        boot.close();
         gb->debug.Log("DMG_ROM.bin read failed!");
+        gb->debug.ForceStop(2);
     }
     boot.close();
 

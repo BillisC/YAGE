@@ -50,10 +50,12 @@ public:
     ~CPU() { Reset(); }
 
     void Preload();
+
     void Reset();
     void Fetch();
+    void Execute();
 
-    void CatchUp(uint8_t cycles);
+    void CatchUp(const uint8_t cycles);
 
 private:
     // Generic Functions
@@ -108,6 +110,9 @@ private:
 
     std::vector<Instruction> InstructionTable;
     std::vector<Instruction> CB_InstructionTable;
+
+    uint8_t opcode;
+    bool is_cb;
 
 private:
     // nop

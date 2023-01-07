@@ -1,28 +1,27 @@
 #include "gameboy.h"
 
 // Initialization
-int Cartridge::Init(const std::string file_name) {
+void Cartridge::Init(const std::string file_name) {
     /* Open the ROM */
     std::fstream rom(file_name, std::ios::in | std::ios::binary);
     if (!rom.is_open()) {
-        gb->debug.Log("Unable to open file!");
-        return 1;
+        gb->debug.Log("Unable to open ROM file!");
+        gb->debug.ForceStop(1);
     }
 
     /* Get the ROM's size */
     rom.seekg(0, std::ios::end);
     size_t file_size = rom.tellg();
-    rom.seekg(0, std::ios::beg);
     gb->debug.Log("File size: " + std::to_string(file_size));
+    rom.seekg(0, std::ios::beg);
 
     /* Buffer catridge data */
     uint8_t* filebuf = new uint8_t[file_size];
     rom.read(reinterpret_cast<char*>(filebuf), file_size);
     if (rom.fail()) {
-        rom.close();
-        gb->debug.Log("File read failed!");
         delete[] filebuf;
-        return 1;
+        gb->debug.Log("Unable to read ROM file!");
+        gb->debug.ForceStop(1);
     }
     rom.close();
 
@@ -31,7 +30,6 @@ int Cartridge::Init(const std::string file_name) {
     InitMBC(filebuf);
 
     delete[] filebuf;
-    return 0;
 }
 
 void Cartridge::Reset() {
@@ -73,8 +71,9 @@ void Cartridge::InitMBC(uint8_t* filebuf) {
     };
     gb->debug.Log("MBC Type: " + GetMBCType());
     
-    if (GetMBCType() != "UNIMPLEMENTED" && mbc->Init(header.rom_size, header.ram_size, filebuf) != 0) {
+    if (GetMBCType() == "UNIMPLEMENTED" || !mbc->Init(header.rom_size, header.ram_size, filebuf)) {
         gb->debug.Log("MBC Initialization failed!");
+        gb->debug.ForceStop(4);
     }
 }
 

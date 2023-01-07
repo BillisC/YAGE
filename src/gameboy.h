@@ -25,7 +25,7 @@ public:
 public:
     Gameboy() {}
 
-    int Load(const std::string rom_name);
+    void Load(const std::string rom_name);
     void Reset();
 };
 

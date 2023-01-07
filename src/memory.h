@@ -78,7 +78,6 @@ private:
     uint8_t wram[0x2000];
     uint8_t vram[0x2000];
     uint8_t OAM[0x9F + 1];
-    uint8_t restrio[0x5F + 1];
     uint8_t ioregs[0xFF + 1];
 
     uint8_t BOOTSTRAP[0xFF + 1];
@@ -102,8 +101,6 @@ public:
     // Mapper
     void Mapper(const uint16_t loc, uint8_t* array, const size_t size);
     void Prepare();
-
-    // Checks
     void LoadBootstrap();
 };
 

@@ -20,3 +20,7 @@ void Debugger::MemoryBuffer() {
 void Debugger::Log(std::string txt) {
     std::cout << "DEBUG: " << txt << "\n";
 }
+
+void Debugger::ForceStop(const uint8_t error) {
+    exit(error);
+}

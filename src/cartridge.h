@@ -34,11 +34,10 @@ public:
     ~Cartridge() { Reset(); }
 
     // Initialization
-    int Init(const std::string file_name);
+    void Init(const std::string file_name);
     void Reset();
 
 private:
-    int LoadFile(const std::string file_name);
     void InitHeader(uint8_t* filebuf);
     void InitMBC(uint8_t* filebuf);
 
